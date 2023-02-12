@@ -1,0 +1,15 @@
+---
+import BlogPost from "../layouts/BlogPost.astro";
+import {getGithubIssues} from "../data/githubIssues";
+import type { ProcessedGitHubIssue } from "../data/githubIssueTypes";
+
+const posts: ProcessedGitHubIssue[] = await getGithubIssues();
+
+const { slug } = Astro.params;
+
+const page = posts.find((post) => post.slug === slug);
+if (!page) return Astro.redirect("/404");
+// const { title, body, } = page;
+---
+
+<BlogPost {...page} />
