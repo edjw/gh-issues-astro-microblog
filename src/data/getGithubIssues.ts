@@ -10,6 +10,10 @@ export type GithubIssueWithSlug = GithubIssue & { slug: string };
 import { repoOwner, repoName, postsState, showTitles } from "../consts";
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 
+if (!GITHUB_TOKEN) {
+  throw new Error("GITHUB_TOKEN is not defined");
+}
+
 export async function getGithubIssues(
   specificIssueNumber?: number,
   page: number = 1
