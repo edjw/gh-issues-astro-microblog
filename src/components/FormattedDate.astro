@@ -1,20 +1,12 @@
 ---
 type Props = {
-	date: string,
+  date: string;
 };
-const { date } = Astro.props;
+const { date: dateString } = Astro.props;
 
-const d = new Date(date);
+import { formatDate } from "../utils/formatDate";
 ---
 
-<time datetime={d.toISOString()}>
-	{
-		d.toLocaleDateString("en-gb", {
-			year: "numeric",
-			month: "short",
-			day: "numeric",
-			hour: "numeric",
-			minute: "numeric",
-		})
-	}
+<time datetime={dateString.toISOString()}>
+  {formatDate(dateString)}
 </time>

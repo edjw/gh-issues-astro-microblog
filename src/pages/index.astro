@@ -1,40 +1,41 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import FormattedDate from "../components/FormattedDate.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import RelativeDate from "../components/RelativeDate.astro";
+import { parseMD } from "../utils/parseMD";
 
-import {getGithubIssues} from "../data/githubIssues";
+import { getGithubIssues } from "../data/githubIssues";
 import type { ProcessedGitHubIssue } from "../data/githubIssueTypes";
-
+import { showTitles } from "../consts";
+import { formatDate } from "../utils/formatDate";
 const posts: ProcessedGitHubIssue[] = await getGithubIssues();
-
-
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+<BaseLayout>
+  <ul class="flex flex-col gap-y-6">
+    {
+      posts.map(({ slug, title, body, created_at }) => (
+        <li class="flex flex-col border px-0">
+          {showTitles && (
+            <h2 class="font-semibold text-lg">
+              <a href={`/${slug}/`}>{title}</a>
+            </h2>
+          )}
 
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-	<FormattedDate date={post.created_at} />
-								<a href={`/${post.slug}/`}>{post.title}</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
-</html>
+          <a href={`/${slug}/`} style="all: unset; cursor: pointer;">
+            <div class="prose" set:html={parseMD(body)} />
+          </a>
+
+          <div class="mb-0 bg-gray-600">
+            <a
+              href={`/${slug}/`}
+              class="hover:underline text-white text-sm"
+              title={formatDate(created_at)}
+            >
+              <RelativeDate date={created_at} />
+            </a>
+          </div>
+        </li>
+      ))
+    }
+  </ul>
+</BaseLayout>

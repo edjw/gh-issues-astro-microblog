@@ -1,12 +1,9 @@
 import slugify from "slugify";
+import { repoOwner, repoName, postsState } from "../consts";
 import type {
   OriginalGitHubIssue,
   ProcessedGitHubIssue,
 } from "./githubIssueTypes";
-
-const repoOwner = "edjw";
-const repoName = "github-issues-headless-cms";
-const postsState = "open";
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 

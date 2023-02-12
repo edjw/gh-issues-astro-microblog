@@ -1,48 +1,43 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import { parseMD } from "../utils/parseMD";
 import type { ProcessedGitHubIssue } from "../data/githubIssueTypes";
+import BaseLayout from "./BaseLayout.astro";
+import { showTitles } from "../consts";
 
 type Props = ProcessedGitHubIssue;
 
-const { title, body, created_at, updated_at } = Astro.props;
-
-
-
+const { title, body, created_at, updated_at, labels } = Astro.props;
 ---
 
-<html lang="en">
-	<head>
-		<BaseHead title={title} />
-		<!-- <BaseHead title={title} description={description} /> -->
+<BaseLayout>
+  <article>
+    {showTitles && <h1>{title}</h1>}
 
-	</head>
+    <p><FormattedDate date={created_at} /></p>
 
-	<body>
-		<Header />
-		<main>
-			<article>
-				<h1 class="text-2xl">{title}</h1>
-				<p><FormattedDate date={created_at} /></p>
+    {
+      labels.length > 0 && (
+        <div>
+          <p>Tags</p>
+          <ul>
+            {labels.map((label) => (
+              <li>{label.name}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
 
+    {
+      updated_at && updated_at !== created_at && (
+        <div class="mt-8">
+          Last updated on <FormattedDate date={updated_at} />
+        </div>
+      )
+    }
+    <hr />
 
-				{
-					(updated_at && updated_at !== created_at) && (
-						<div class="last-updated-on">
-							Last updated on <FormattedDate date={updated_at} />
-						</div>
-					)
-				}
-				<hr />
-
-			<div set:html={parseMD(body)} />
-
-
-			</article>
-		</main>
-		<Footer />
-	</body>
-</html>
+    <div class="mt-12" set:html={parseMD(body)} />
+  </article>
+</BaseLayout>

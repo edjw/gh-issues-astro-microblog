@@ -1,17 +1,17 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
-import { SITE_TITLE } from "../consts";
+import { SITE_TITLE, MAIN_WEBSITE_URL } from "../consts";
 ---
 
-<header>
-	<h2>
-		{SITE_TITLE}
+<header class="flex gap-x-8">
+	<h2 class="hover:underline">
+		<a href="/">{SITE_TITLE}</a>
 	</h2>
 	<nav>
-		<HeaderLink href="/" class={"text-4xl"}>Home</HeaderLink>
-		<HeaderLink href="/blog">Blog</HeaderLink>
-		<HeaderLink href="/about">About</HeaderLink>
-		<HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">Twitter</HeaderLink>
-		<HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink>
+		<HeaderLink href={MAIN_WEBSITE_URL} class={`external hover:underline`}>Main site</HeaderLink>
+		<!-- <HeaderLink href="/">Micro</HeaderLink> -->
+		<!-- <HeaderLink href="/blog">Blog</HeaderLink> -->
+		<!-- <HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">Twitter</HeaderLink> -->
+		<!-- <HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink> -->
 	</nav>
 </header>
