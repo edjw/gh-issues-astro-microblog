@@ -1,10 +1,11 @@
 [build]
   command = "astro build"
-  functions = "netlify/functions"
+  # functions = "netlify/functions"
   publish = "dist"
 
 [functions]
   node_bundler = "esbuild"
+  external_node_modules = ["astro"]
 
 
 [[headers]]
