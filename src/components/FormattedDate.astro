@@ -4,9 +4,11 @@ type Props = {
 };
 const { date: dateString } = Astro.props;
 
+const date = new Date(dateString);
+
 import { formatDate } from "../utils/formatDate";
 ---
 
-<time datetime={dateString.toISOString()}>
+<time datetime={date.toISOString()}>
   {formatDate(dateString)}
 </time>

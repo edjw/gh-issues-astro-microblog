@@ -9,7 +9,7 @@ export const repoOwner = "edjw";
 export const repoName = "github-issues-headless-cms";
 export const postsState: postsStateType = "open";
 export const showTitles: showTitlesType = false;
-export const showTags: showTagsType = false;
+export const showTags: showTagsType = true;
 
 type postsStateType = "open" | "closed" | "all";
 type showTitlesType = boolean;

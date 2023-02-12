@@ -1,11 +1,12 @@
 ---
+import type { GithubIssueWithSlug } from "../data/getGithubIssues";
+
 import FormattedDate from "../components/FormattedDate.astro";
 import { parseMD } from "../utils/parseMD";
-import type { ProcessedGitHubIssue } from "../data/githubIssueTypes";
 import BaseLayout from "./BaseLayout.astro";
 import { showTitles } from "../consts";
 
-type Props = ProcessedGitHubIssue;
+type Props = GithubIssueWithSlug;
 
 const { title, body, created_at, updated_at, labels } = Astro.props;
 ---
@@ -17,12 +18,18 @@ const { title, body, created_at, updated_at, labels } = Astro.props;
     <p><FormattedDate date={created_at} /></p>
 
     {
-      labels.length > 0 && (
-        <div>
-          <p>Tags</p>
-          <ul>
+      labels !== undefined && labels.length > 0 && (
+        <div class="flex sm:items-center flex-col sm:flex-row gap-x-2">
+          <p class="my-0">Tags</p>
+          <ul class="flex list-none pl-0 my-0 gap-x-2">
             {labels.map((label) => (
-              <li>{label.name}</li>
+              <li class="my-0 px-0">
+                {typeof label !== "string" ? (
+                  <a href={`${label.name}`}>{label.name}</a>
+                ) : (
+                  <a href={`${label}`}>{label}</a>
+                )}
+              </li>
             ))}
           </ul>
         </div>
@@ -38,6 +45,10 @@ const { title, body, created_at, updated_at, labels } = Astro.props;
     }
     <hr />
 
-    <div class="mt-12" set:html={parseMD(body)} />
+    {
+      body !== undefined && body !== null && (
+        <div class="mt-12" set:html={parseMD(body)} />
+      )
+    }
   </article>
 </BaseLayout>

@@ -1,15 +1,14 @@
 ---
 import BlogPost from "../layouts/BlogPost.astro";
-import {getGithubIssues} from "../data/githubIssues";
-import type { ProcessedGitHubIssue } from "../data/githubIssueTypes";
 
-const posts: ProcessedGitHubIssue[] = await getGithubIssues();
+import { getGithubIssues } from "../data/getGithubIssues";
+import type { GithubIssueWithSlug } from "../data/getGithubIssues";
 
-const { slug } = Astro.params;
+const { number, slug } = Astro.params;
+const posts: GithubIssueWithSlug[] = await getGithubIssues(Number(number));
 
 const page = posts.find((post) => post.slug === slug);
-if (!page) return Astro.redirect("/404");
-
+if (page === undefined) return Astro.redirect("/404");
 ---
 
-<BlogPost {...page} />
+{page && <BlogPost {...page} />}

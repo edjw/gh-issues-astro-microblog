@@ -1,0 +1,44 @@
+---
+import RelativeDate from "../components/RelativeDate.astro";
+import { parseMD } from "../utils/parseMD";
+import { showTitles } from "../consts";
+import { formatDate } from "../utils/formatDate";
+
+type Props = {
+  title: string;
+  slug: string;
+  created_at: string;
+  body: string | null | undefined;
+  number: number;
+};
+
+const { title, slug, created_at, body, number } = Astro.props;
+---
+
+<li class="flex flex-col border px-0">
+  {
+    showTitles && (
+      <h2 class="font-semibold text-lg">
+        <a href={`/${slug}/`}>{title}</a>
+      </h2>
+    )
+  }
+
+  {
+    body !== null && body !== undefined && (
+      <a href={`/${slug}/`} style="all: unset; cursor: pointer;">
+        <div class="prose" set:html={parseMD(body)} />
+      </a>
+    )
+  }
+
+  <div class="mb-0 bg-gray-600">
+    <a
+      href={`/${slug}/`}
+      class="hover:underline text-white text-sm"
+      title={formatDate(created_at)}
+    >
+      <RelativeDate date={created_at} />
+    </a>
+  </div>
+</li>
