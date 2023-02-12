@@ -4,7 +4,7 @@ import tailwind from "@astrojs/tailwind";
 import netlify from "@astrojs/netlify/functions";
 
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://gh-issues-astro-microblog.netlify.app",
   integrations: [sitemap(), tailwind()],
   output: "server",
   adapter: netlify(),
