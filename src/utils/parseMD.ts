@@ -1,6 +1,6 @@
 import { marked } from "marked";
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 
 export const parseMD = (content: string) => {
-  return DOMPurify.sanitize(marked.parse(content));
+  return sanitizeHtml(marked.parse(content));
 };
