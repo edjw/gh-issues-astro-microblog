@@ -8,4 +8,9 @@ export default defineConfig({
   integrations: [sitemap(), tailwind()],
   output: "server",
   adapter: netlify(),
+  vite: {
+    ssr: {
+      external: ["sanitize-html", "@octokit/request"],
+    },
+  },
 });
