@@ -8,9 +8,16 @@ type GithubIssue =
 export type GithubIssueWithSlug = GithubIssue & { slug: string };
 
 import { repoOwner, repoName, postsState, showTitles } from "../consts";
-const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 
-if (!GITHUB_TOKEN) {
+let GITHUB_TOKEN: string = "";
+
+if (import.meta.env.GITHUB_TOKEN) {
+  GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
+} else if (process.env.GITHUB_TOKEN) {
+  GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+}
+
+if (GITHUB_TOKEN === "") {
   throw new Error("GITHUB_TOKEN is not defined");
 }
 
