@@ -16,6 +16,8 @@ if (!GITHUB_TOKEN) {
   throw new Error("GITHUB_TOKEN is not defined");
 }
 
+const labelsToExclude = ["draft", "no-publish"];
+
 export async function getGithubIssues(
   specificIssueNumber?: number,
   page: number = 1
@@ -49,17 +51,28 @@ export async function getGithubIssues(
 }
 
 function processData(data: GithubIssue[]): GithubIssueWithSlug[] {
-  let processedData = data.map((issue) => {
-    const slug = slugify(`${issue.number}-${issue.title}`, {
-      lower: true,
-      strict: true,
-      replacement: "-",
+  let processedData = data
+    .map((issue) => {
+      const slug = slugify(`${issue.number}-${issue.title}`, {
+        lower: true,
+        strict: true,
+        replacement: "-",
+      });
+      return {
+        ...issue,
+        slug,
+      };
+    })
+    .filter((issue) => {
+      // Only keep issues that don't have any of the labels in labelsToExclude
+      if (issue.labels) {
+        return !issue.labels.some((label) =>
+          labelsToExclude.includes(label.name)
+        );
+      }
+      return true;
     });
-    return {
-      ...issue,
-      slug,
-    };
-  });
+
   // Only keep issues that have a body if showTitles is false
   if (!showTitles) {
     processedData = processedData.filter(

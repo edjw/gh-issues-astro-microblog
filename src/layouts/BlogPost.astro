@@ -13,53 +13,74 @@ type Props = GithubIssueWithSlug;
 const { title, body, created_at, updated_at, labels, html_url } = Astro.props;
 ---
 
-<BaseLayout>
-  <article>
-    {showTitles && <h1>{title}</h1>}
+<BaseLayout title={title} description={title}>
+  <article class="flex flex-col gap-y-28">
+    <div>
+      {showTitles && <h2 class="mt-0">{title}</h2>}
+      {
+        body !== undefined && body !== null && (
+          <div class="" set:html={parseMD(body)} />
+        )
+      }
+    </div>
+    <div class="flex flex-col gap-y-4 border p-0 rounded-lg px-4 py-4 -mx-2">
+      {
+        labels !== undefined && labels.length > 0 && (
+          <div class="flex sm:items-center flex-col sm:flex-row gap-x-2">
+            <ul class="flex list-none pl-0 my-0 gap-x-2">
+              {labels.map((label) => (
+                <li class="my-0 px-0">
+                  {typeof label !== "string" ? (
+                    <a
+                      href={`/tags/${label.name}`}
+                      class="before:content-['#'] before:-mr-1 font-normal text-sm no-underline hover:underline"
+                    >
+                      {label.name}
+                    </a>
+                  ) : (
+                    <a
+                      href={`/tags/${label}`}
+                      class="before:content-['#'] before:-mr-1 font-normal text-sm no-underline hover:underline"
+                    >
+                      #{label}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+      <div class="flex flex-col">
+        <p class="my-0 text-sm">
+          <span class="font-semibold">Posted</span>: <FormattedDate
+            date={created_at}
+          />
+        </p>
 
-    <p><FormattedDate date={created_at} /></p>
-
-    {
-      labels !== undefined && labels.length > 0 && (
-        <div class="flex sm:items-center flex-col sm:flex-row gap-x-2">
-          <ul class="flex list-none pl-0 my-0 gap-x-2">
-            {labels.map((label) => (
-              <li class="my-0 px-0">
-                {typeof label !== "string" ? (
-                  <a href={`/tags/${label.name}`}>#{label.name}</a>
-                ) : (
-                  <a href={`/tags/${label}`}>#{label}</a>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )
-    }
-
-    {
-      updated_at && updated_at !== created_at && (
-        <div class="mt-8">
-          Last updated on <FormattedDate date={updated_at} />
-        </div>
-      )
-    }
-    <hr />
-
-    {
-      body !== undefined && body !== null && (
-        <div class="mt-12" set:html={parseMD(body)} />
-      )
-    }
-
-    {
-      isDev && html_url !== undefined && (
-        <div>
-          <a href={html_url} target="_blank" rel="noopener noreferrer">
-            View on GitHub
-          </a>
-        </div>
-      )
-    }
+        {
+          updated_at && updated_at !== created_at && (
+            <p class="my-0 text-sm">
+              <span class="font-semibold">Last updated</span>:{" "}
+              <FormattedDate date={updated_at} />
+            </p>
+          )
+        }
+      </div>
+      {
+        isDev && html_url !== undefined && (
+          <div>
+            <a
+              href={html_url}
+              class="font-normal text-sm no-underline hover:underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              View on GitHub
+            </a>
+          </div>
+        )
+      }
+    </div>
   </article>
 </BaseLayout>
