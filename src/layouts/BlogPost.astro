@@ -6,9 +6,11 @@ import { parseMD } from "../utils/parseMD";
 import BaseLayout from "./BaseLayout.astro";
 import { showTitles } from "../consts";
 
+const isDev = process.env.NODE_ENV === "development";
+
 type Props = GithubIssueWithSlug;
 
-const { title, body, created_at, updated_at, labels } = Astro.props;
+const { title, body, created_at, updated_at, labels, html_url } = Astro.props;
 ---
 
 <BaseLayout>
@@ -48,6 +50,16 @@ const { title, body, created_at, updated_at, labels } = Astro.props;
     {
       body !== undefined && body !== null && (
         <div class="mt-12" set:html={parseMD(body)} />
+      )
+    }
+
+    {
+      isDev && html_url !== undefined && (
+        <div>
+          <a href={html_url} target="_blank" rel="noopener noreferrer">
+            View on GitHub
+          </a>
+        </div>
       )
     }
   </article>

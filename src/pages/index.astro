@@ -6,8 +6,6 @@ import type { GithubIssueWithSlug } from "../data/getGithubIssues";
 
 const posts: GithubIssueWithSlug[] = await getGithubIssues();
 
-console.log(posts[0].number);
-
 import Post from "../components/Post.astro";
 ---
 
