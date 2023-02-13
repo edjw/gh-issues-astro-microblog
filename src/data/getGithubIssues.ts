@@ -18,7 +18,8 @@ if (import.meta.env.GITHUB_TOKEN) {
 }
 
 if (GITHUB_TOKEN === "") {
-  throw new Error("GITHUB_TOKEN is not defined");
+  console.warn("No GitHub token found.");
+  console.warn({ GITHUB_TOKEN });
 }
 
 export async function getGithubIssues(
