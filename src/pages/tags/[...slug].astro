@@ -21,19 +21,22 @@ if (tagPosts === undefined) return Astro.redirect("/404");
 ---
 
 <BaseLayout>
-  <h2><span class="italic">#{slug}</span></h2>
+  <h2 class="before:content-['#']">{slug}</h2>
   {
     tagPosts !== undefined && tagPosts.length > 0 ? (
-      <ul class="flex flex-col gap-y-6">
-        {tagPosts.map(({ title, slug, created_at, body, number }) => (
-          <Post
-            title={title}
-            slug={slug}
-            created_at={created_at}
-            body={body}
-            number={number}
-          />
-        ))}
+      <ul class="flex flex-col gap-y-6 pl-0">
+        {tagPosts.map(({ title, slug, created_at, body, labels }) => {
+          if (typeof labels === "string") return false;
+          return (
+            <Post
+              title={title}
+              slug={slug}
+              created_at={created_at}
+              body={body}
+              labels={labels}
+            />
+          );
+        })}
       </ul>
     ) : (
       <p class="text-center text-gray-500">No posts yet</p>

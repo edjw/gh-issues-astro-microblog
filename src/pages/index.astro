@@ -3,7 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 import { getGithubIssues } from "../data/getGithubIssues";
 import type { GithubIssueWithSlug } from "../data/getGithubIssues";
-
+import type { Label } from "./tags/index.astro";
 const posts: GithubIssueWithSlug[] = await getGithubIssues();
 
 import Post from "../components/Post.astro";
@@ -12,16 +12,19 @@ import Post from "../components/Post.astro";
 <BaseLayout>
   {
     posts.length > 0 ? (
-      <ul class="flex flex-col gap-y-6">
-        {posts.map(({ title, slug, created_at, body, number }) => (
-          <Post
-            title={title}
-            slug={slug}
-            created_at={created_at}
-            body={body}
-            number={number}
-          />
-        ))}
+      <ul class="flex flex-col gap-y-6 pl-0 max-w-prose">
+        {posts.map(({ title, slug, created_at, body, labels }) => {
+          if (typeof labels === "string") return false;
+          return (
+            <Post
+              title={title}
+              slug={slug}
+              created_at={created_at}
+              body={body}
+              labels={labels}
+            />
+          );
+        })}
       </ul>
     ) : (
       <p class="text-center text-gray-500">No posts yet</p>

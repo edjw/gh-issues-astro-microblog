@@ -4,41 +4,61 @@ import { parseMD } from "../utils/parseMD";
 import { showTitles } from "../consts";
 import { formatDate } from "../utils/formatDate";
 
+import type { Label } from "../pages/tags/index.astro";
 type Props = {
   title: string;
   slug: string;
   created_at: string;
   body: string | null | undefined;
-  number: number;
+  labels: Label[];
 };
 
-const { title, slug, created_at, body, number } = Astro.props;
+const { title, slug, created_at, body, labels } = Astro.props;
 ---
 
-<li class="flex flex-col border px-0">
-  {
-    showTitles && (
-      <h2 class="font-semibold text-lg">
-        <a href={`/${slug}/`}>{title}</a>
-      </h2>
-    )
-  }
+<li class="flex flex-col border hover:shadow-xl p-0 rounded-lg">
+  <a href={`/${slug}/`} style="all: unset; cursor: pointer;">
+    <div class="px-8 pt-8">
+      {
+        showTitles && (
+          <h2 class="font-semibold text-lg mt-0">
+            <a href={`/${slug}/`}>{title}</a>
+          </h2>
+        )
+      }
 
-  {
-    body !== null && body !== undefined && (
-      <a href={`/${slug}/`} style="all: unset; cursor: pointer;">
-        <div class="prose" set:html={parseMD(body)} />
-      </a>
-    )
-  }
+      {
+        body !== null && body !== undefined && (
+          <div class="prose" set:html={parseMD(body)} />
+        )
+      }
+    </div>
 
-  <div class="mb-0 bg-gray-600">
-    <a
-      href={`/${slug}/`}
-      class="hover:underline text-white text-sm"
-      title={formatDate(created_at)}
+    <div
+      class="mb-0 flex flex-col sm:flex-row sm:justify-between sm:items-center bg-gray-200 mt-12 px-8 py-2 gap-y-2"
     >
-      <RelativeDate date={created_at} />
-    </a>
-  </div>
+      <p class="my-0 text-sm" title={formatDate(created_at)}>
+        <a href={`/${slug}/`} class="no-underline hover:underline">
+          <RelativeDate date={created_at} />
+        </a>
+      </p>
+
+      {
+        labels.length > 0 && (
+          <ul class="flex gap-x-2 list-none my-0 pl-0">
+            {labels.map(({ name }) => (
+              <li class="my-0 pl-0">
+                <a
+                  href={`/tags/${name}/`}
+                  class="hover:underline no-underline before:content-['#'] before:-mr-1 text-sm"
+                >
+                  {name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </a>
 </li>

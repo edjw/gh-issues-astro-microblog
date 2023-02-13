@@ -26,6 +26,7 @@
 	},
 	"devDependencies": {
 		"@octokit/types": "^9.0.0",
+		"@tailwindcss/line-clamp": "^0.4.2",
 		"@types/marked": "^4.0.8",
 		"@types/sanitize-html": "^2.8.0"
 	}
