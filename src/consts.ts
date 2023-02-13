@@ -3,7 +3,9 @@
 
 export const SITE_TITLE = "Ed Johnson-Williams' microblog";
 export const SITE_DESCRIPTION = "It's a bit like a blog, but shorter";
-export const MAIN_WEBSITE_URL = "https://gh-issues-astro-microblog.netlify.app";
+
+// This is the URL for another website that you want to link to.
+export const MAIN_WEBSITE_URL = "https://edjohnsonwilliams.co.uk";
 
 export const repoOwner = "edjw";
 export const repoName = "github-issues-headless-cms";

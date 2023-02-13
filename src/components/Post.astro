@@ -17,9 +17,14 @@ const { title, slug, created_at, body, labels } = Astro.props;
 ---
 
 <li
-  class="flex flex-col border hover:shadow-xl p-0 rounded-lg gap-y-8"
-  onclick=""
+  class="flex flex-col border hover:shadow-xl p-0 rounded-lg gap-y-8 relative overflow-hidden"
 >
+  <a
+    href={`/${slug}/`}
+    class="mt-0 text-right linkToPost absolute right-2 top-2"
+  >
+    <span class="sr-only">Link to post</span>
+  </a>
   <div class="px-8 pt-4">
     {
       showTitles && (
@@ -31,7 +36,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
 
     {
       body !== null && body !== undefined && (
-        <Fragment class="prose" set:html={parseMD(body)} />
+        <div class="prose" set:html={parseMD(body)} />
       )
     }
   </div>
@@ -63,3 +68,17 @@ const { title, slug, created_at, body, labels } = Astro.props;
     }
   </div>
 </li>
+
+<style>
+  a.linkToPost::after {
+    content: "";
+    width: 16px;
+    height: 16px;
+    margin-left: 1px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z'/%3E%3Cpath fill-rule='evenodd' d='M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z'/%3E%3C/svg%3E");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: inline-block;
+  }
+</style>

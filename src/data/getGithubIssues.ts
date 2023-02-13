@@ -80,5 +80,6 @@ function processData(data: GithubIssue[]): GithubIssueWithSlug[] {
         issue.body !== "" && issue.body !== null && issue.body !== undefined
     );
   }
+
   return processedData;
 }

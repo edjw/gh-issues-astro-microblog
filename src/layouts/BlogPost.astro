@@ -14,16 +14,16 @@ const { title, body, created_at, updated_at, labels, html_url } = Astro.props;
 ---
 
 <BaseLayout title={title} description={title}>
-  <article class="flex flex-col gap-y-28">
-    <div>
-      {showTitles && <h2 class="mt-0">{title}</h2>}
+  <article class="flex flex-col gap-y-28 border rounded-lg">
+    <div class="px-4 py-4">
+      {showTitles && <h2 class=" mt-0">{title}</h2>}
       {
         body !== undefined && body !== null && (
           <div class="" set:html={parseMD(body)} />
         )
       }
     </div>
-    <div class="flex flex-col gap-y-4 border p-0 rounded-lg px-4 py-4 -mx-2">
+    <div class="flex flex-col gap-y-4 px-4 py-4 bg-gray-200">
       {
         labels !== undefined && labels.length > 0 && (
           <div class="flex sm:items-center flex-col sm:flex-row gap-x-2">
@@ -83,4 +83,12 @@ const { title, body, created_at, updated_at, labels, html_url } = Astro.props;
       }
     </div>
   </article>
+  <p class="pt-0">
+    <a
+      href="/"
+      class="text-sm font-normal no-underline hover:underline before:content-['←']"
+    >
+      Back to all posts</a
+    >
+  </p>
 </BaseLayout>
