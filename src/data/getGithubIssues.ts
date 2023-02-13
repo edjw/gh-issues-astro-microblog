@@ -48,26 +48,23 @@ export async function getGithubIssues(
 }
 
 function processData(data: GithubIssue[]): GithubIssueWithSlug[] {
-  const processedData = data
-    .map((issue) => {
-      const slug = slugify(`${issue.number}-${issue.title}`, {
-        lower: true,
-        strict: true,
-        replacement: "-",
-      });
-      return {
-        ...issue,
-        slug,
-      };
-    })
-    .filter((issue) => issue.user && issue.user.login === repoOwner)
-    .filter((issue) => {
-      if (showTitles) {
-        return true;
-      }
-      return (
-        issue.body !== null && issue.body !== undefined && issue.body !== ""
-      );
+  let processedData = data.map((issue) => {
+    const slug = slugify(`${issue.number}-${issue.title}`, {
+      lower: true,
+      strict: true,
+      replacement: "-",
     });
+    return {
+      ...issue,
+      slug,
+    };
+  });
+  // Only keep issues that have a body if showTitles is false
+  if (!showTitles) {
+    processedData = processedData.filter(
+      (issue) =>
+        issue.body !== "" && issue.body !== null && issue.body !== undefined
+    );
+  }
   return processedData;
 }
