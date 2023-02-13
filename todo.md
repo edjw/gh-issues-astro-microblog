@@ -1,9 +1,3 @@
-- work out how to do post description within a Github Issue
+- hide long posts in the stream and click to expand
 
-- get rss working
-
-Limit the fetch to a range of issues?
-
-Design the stream nicely
-
-Pagination
+Pagination, swtich to page 2, 3, 4 etc

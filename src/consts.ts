@@ -2,8 +2,8 @@
 // You can import this data from anywhere in your site by using the `import` keyword.
 
 export const SITE_TITLE = "Ed Johnson-Williams' microblog";
-export const SITE_DESCRIPTION = "Welcome to my microblog!";
-export const MAIN_WEBSITE_URL = "https://edjohnsonwilliams.co.uk";
+export const SITE_DESCRIPTION = "It's a bit like a blog, but shorter";
+export const MAIN_WEBSITE_URL = "https://gh-issues-astro-microblog.netlify.app";
 
 export const repoOwner = "edjw";
 export const repoName = "github-issues-headless-cms";

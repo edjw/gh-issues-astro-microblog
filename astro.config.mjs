@@ -3,7 +3,6 @@ import sitemap from "@astrojs/sitemap";
 import tailwind from "@astrojs/tailwind";
 // import netlify from "@astrojs/netlify/functions";
 import vercel from "@astrojs/vercel/serverless";
-// import vercel from "@astrojs/vercel/edge";
 
 // https://astro.build/config
 export default defineConfig({
@@ -11,9 +10,4 @@ export default defineConfig({
   integrations: [sitemap(), tailwind()],
   output: "server",
   adapter: vercel(),
-  // vite: {
-  //   ssr: {
-  //     external: ["sanitize-html", "@octokit/request"]
-  //   }
-  // }
 });

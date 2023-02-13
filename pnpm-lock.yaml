@@ -15,6 +15,7 @@ specifiers:
   '@types/sanitize-html': ^2.8.0
   astro: ^2.0.10
   marked: ^4.2.12
+  package: ^1.0.1
   sanitize-html: ^2.9.0
   slugify: ^1.6.5
   tailwindcss: ^3.0.24
@@ -30,6 +31,7 @@ dependencies:
   '@tailwindcss/typography': 0.5.9_tailwindcss@3.2.6
   astro: 2.0.10
   marked: 4.2.12
+  package: 1.0.1
   sanitize-html: 2.9.0
   slugify: 1.6.5
   tailwindcss: 3.2.6
@@ -3000,6 +3002,11 @@ packages:
   /p-try/2.2.0:
     resolution: {integrity: sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==}
     engines: {node: '>=6'}
+    dev: false
+
+  /package/1.0.1:
+    resolution: {integrity: sha512-g6xZR6CO7okjie83sIRJodgGvaXqymfE5GLhN8N2TmZGShmHc/V23hO/vWbdnuy3D81As3pfovw72gGi42l9qA==}
+    engines: {node: '>= 0.6.0'}
     dev: false
 
   /parse-latin/5.0.1:
