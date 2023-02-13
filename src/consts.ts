@@ -8,7 +8,11 @@ export const MAIN_WEBSITE_URL = "https://edjohnsonwilliams.co.uk";
 export const repoOwner = "edjw";
 export const repoName = "github-issues-headless-cms";
 export const postsState: postsStateType = "open";
+
+// showTitles should probably be false if you're making
+// a microblog and true if you're doing a blog
 export const showTitles: showTitlesType = false;
+
 export const showTags: showTagsType = true;
 
 type postsStateType = "open" | "closed" | "all";

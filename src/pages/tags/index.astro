@@ -40,14 +40,14 @@ const allLabels = posts
   <p>A list of all the tags used on this site</p>
   {
     allLabels.length > 0 ? (
-      <ul class="flex flex-col gap-y-2">
+      <ul class="flex flex-col gap-y-2 list-none pl-0">
         {allLabels.map((label) => (
           <li>
             <a
               href={`/tags/${label.name}`}
               class="text-gray-500 hover:text-gray-700"
             >
-              {label.name}
+              #{label.name}
             </a>
           </li>
         ))}
