@@ -12,3 +12,7 @@ set issues permission to read-only
 can only set it for 12 months validity at a time
 
 
+If want to use a private repo for the issues, need to use a classic token with repo permissions
+$$
+
+$$

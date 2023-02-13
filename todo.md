@@ -1,10 +1,8 @@
-- test it works with netlify
+
 
 - work out how to do post description within a Github Issue
 
 - get rss working
-
-Fetch just one issue on slug]
 
 Limit the fetch to a range of issues?
 
