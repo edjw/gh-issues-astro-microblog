@@ -15,7 +15,14 @@ if (import.meta.env.GITHUB_TOKEN) {
   GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 } else if (process.env.GITHUB_TOKEN) {
   GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+} else if (import.meta.env.PUBLIC_GITHUB_TOKEN) {
+  GITHUB_TOKEN = import.meta.env.PUBLIC_GITHUB_TOKEN;
+} else if (process.env.PUBLIC_GITHUB_TOKEN) {
+  GITHUB_TOKEN = process.env.PUBLIC_GITHUB_TOKEN;
 }
+
+console.log(JSON.stringify(import.meta.env, null, 2));
+console.log(JSON.stringify(process.env, null, 2));
 
 if (GITHUB_TOKEN === "") {
   console.log("No GitHub token found.");
