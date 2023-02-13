@@ -18,10 +18,10 @@ if (import.meta.env.GITHUB_TOKEN) {
 }
 
 if (GITHUB_TOKEN === "") {
-  console.warn("No GitHub token found.");
-  console.warn({ GITHUB_TOKEN });
+  console.log("No GitHub token found.");
+  console.log({ GITHUB_TOKEN });
 }
-
+console.log({ GITHUB_TOKEN });
 export async function getGithubIssues(
   specificIssueNumber?: number,
   page: number = 1
