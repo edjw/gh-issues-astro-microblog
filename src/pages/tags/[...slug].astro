@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Post from "../../components/Post.astro";
+import ShowMoreScript from "../../components/showMoreScript.astro";
 
 import { getGithubIssues } from "../../data/getGithubIssues";
 import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
@@ -51,3 +52,4 @@ if (tagPosts === undefined) return Astro.redirect("/404");
     )
   }
 </BaseLayout>
+<ShowMoreScript />

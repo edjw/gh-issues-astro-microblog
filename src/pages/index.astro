@@ -6,6 +6,7 @@ import type { GithubIssueWithSlug } from "../data/getGithubIssues";
 const posts: GithubIssueWithSlug[] = await getGithubIssues();
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Post from "../components/Post.astro";
+import ShowMoreScript from "../components/showMoreScript.astro";
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
@@ -30,3 +31,5 @@ import Post from "../components/Post.astro";
     )
   }
 </BaseLayout>
+
+<ShowMoreScript />

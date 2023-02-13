@@ -17,7 +17,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
 ---
 
 <li
-  class="flex flex-col border hover:shadow-xl p-0 rounded-lg gap-y-8 relative overflow-hidden"
+  class="flex flex-col border hover:shadow-xl p-0 rounded-lg gap-y-8 relative overflow-hidden postWrapper"
 >
   <a
     href={`/${slug}/`}
@@ -25,7 +25,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
   >
     <span class="sr-only">Link to post</span>
   </a>
-  <div class="px-8 pt-4">
+  <div class="px-8 pt-4 max-h-80 postContent">
     {
       showTitles && (
         <h2 class="font-semibold text-lg mt-0">
@@ -36,10 +36,20 @@ const { title, slug, created_at, body, labels } = Astro.props;
 
     {
       body !== null && body !== undefined && (
-        <div class="prose" set:html={parseMD(body)} />
+        <div class="prose max-h-full" set:html={parseMD(body)} />
       )
     }
   </div>
+
+  {
+    body !== null && body !== undefined && (
+      <div class="absolute left-[30px] bg-white bottom-16 showMoreButtonWrapper hidden">
+        <div class="bg-gray-600 rounded py-1 px-2">
+          <button class="text-white">Show more &#8595;</button>
+        </div>
+      </div>
+    )
+  }
 
   <div
     class="mb-0 flex flex-col sm:flex-row justify-center sm:justify-between sm:items-center bg-gray-200 px-8 py-4 gap-y-2"
