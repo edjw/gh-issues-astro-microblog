@@ -1,0 +1,36 @@
+<div class="flex gap-x-4 flex-col sm:flex-row">
+  <p class="leading-loose">
+    <button
+      id="dark"
+      class="no-underline dark:text-stone-700 dark:cursor-auto hover:bg-gray-200 dark:hover:bg-transparent"
+    >
+      Dark</button
+    >
+    <span class="invisible sm:visible">/</span>
+    <button
+      id="light"
+      class="no-underline text-gray-200 cursor-auto dark:cursor-pointer dark:hover:bg-gray-200 dark:hover:text-stone-700 hover:bg-transparent"
+    >
+      Light</button
+    >
+  </p>
+</div>
+<script>
+  const darkModeButton = document.querySelector(
+    "button#dark"
+  ) as HTMLButtonElement;
+
+  const lightModeButton = document.querySelector(
+    "button#light"
+  ) as HTMLButtonElement;
+
+  darkModeButton.addEventListener("click", () => {
+    document.documentElement.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+  });
+
+  lightModeButton.addEventListener("click", () => {
+    document.documentElement.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+  });
+</script>

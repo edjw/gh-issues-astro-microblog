@@ -1,3 +1,9 @@
-- hide long posts in the stream and click to expand
 
-Pagination, swtich to page 2, 3, 4 etc
+Pagination, switch to page 2, 3, 4 etc
+
+
+add social images with vercel og-image
+
+Cache the response better? Cloudflare? Headers. Or have a background process fetching the data and making it available somehow
+
+Try to reproduce netlify issue

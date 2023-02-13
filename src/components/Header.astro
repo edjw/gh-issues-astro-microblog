@@ -1,33 +1,39 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
+import ThemeSwitcher from "../components/ThemeSwitcher.astro";
 import { SITE_TITLE, MAIN_WEBSITE_URL } from "../consts";
 ---
 
 <header class="flex gap-x-4 sm:gap-x-8 items-center justify-between">
-  <h1 class="underline hover:no-underline text-normal">
+  <h1 class="underline hover:no-underline text-normal text-lg">
     <a href="/">{SITE_TITLE}</a>
   </h1>
   <nav>
-    <HeaderLink href={MAIN_WEBSITE_URL} class={`external hover:underline`}>
+    <HeaderLink
+      href={MAIN_WEBSITE_URL}
+      class={`hover:underline flex flex-row items-center`}
+    >
       Main site
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-4 h-4 ml-1 inline-block"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+        ></path>
+      </svg>
     </HeaderLink>
     <!-- <HeaderLink href="/">Micro</HeaderLink> -->
     <!-- <HeaderLink href="/blog">Blog</HeaderLink> -->
     <!-- <HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">Twitter</HeaderLink> -->
     <!-- <HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink> -->
   </nav>
+  <ThemeSwitcher />
 </header>
-
-<style>
-  a.external::after {
-    content: "";
-    width: 11px;
-    height: 11px;
-    margin-left: 1px;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='currentColor' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z'/%3E%3Cpath fill-rule='evenodd' d='M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z'/%3E%3C/svg%3E");
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    display: inline-block;
-  }
-</style>
