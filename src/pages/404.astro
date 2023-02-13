@@ -1,13 +1,18 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { showTags } from "../consts";
 ---
 
 <BaseLayout>
+  <h2>No page found</h2>
 
-    <h2>No page found</h2>
-
-
-        <a href="/">Go back home</a>
-
-
+  <p><a href="/">Go home</a></p>
+  {
+    showTags && (
+      <>
+        <p />
+        <a href="/tags">Go to tags</a>
+      </>
+    )
+  }
 </BaseLayout>

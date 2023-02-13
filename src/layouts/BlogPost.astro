@@ -22,14 +22,13 @@ const { title, body, created_at, updated_at, labels, html_url } = Astro.props;
     {
       labels !== undefined && labels.length > 0 && (
         <div class="flex sm:items-center flex-col sm:flex-row gap-x-2">
-          <p class="my-0">Tags</p>
           <ul class="flex list-none pl-0 my-0 gap-x-2">
             {labels.map((label) => (
               <li class="my-0 px-0">
                 {typeof label !== "string" ? (
-                  <a href={`${label.name}`}>{label.name}</a>
+                  <a href={`/tags/${label.name}`}>#{label.name}</a>
                 ) : (
-                  <a href={`${label}`}>{label}</a>
+                  <a href={`/tags/${label}`}>#{label}</a>
                 )}
               </li>
             ))}

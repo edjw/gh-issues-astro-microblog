@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Post from "../../components/Post.astro";
+
+import { getGithubIssues } from "../../data/getGithubIssues";
+import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
+const { slug } = Astro.params;
+const posts: GithubIssueWithSlug[] = await getGithubIssues();
+
+// // find all the posts where the slug matches the label name
+const tagPosts = posts.filter((post: GithubIssueWithSlug) => {
+  return post.labels.some((label) => {
+    if (typeof label == "string") return false;
+    else {
+      return label.name === slug;
+    }
+  });
+});
+
+if (tagPosts === undefined) return Astro.redirect("/404");
+---
+
+<BaseLayout>
+  <h2><span class="italic">#{slug}</span></h2>
+  {
+    tagPosts !== undefined && tagPosts.length > 0 ? (
+      <ul class="flex flex-col gap-y-6">
+        {tagPosts.map(({ title, slug, created_at, body, number }) => (
+          <Post
+            title={title}
+            slug={slug}
+            created_at={created_at}
+            body={body}
+            number={number}
+          />
+        ))}
+      </ul>
+    ) : (
+      <p class="text-center text-gray-500">No posts yet</p>
+    )
+  }
+</BaseLayout>

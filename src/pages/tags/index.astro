@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+import { getGithubIssues } from "../../data/getGithubIssues";
+import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
+
+const posts: GithubIssueWithSlug[] = await getGithubIssues();
+
+export type Label = {
+  id?: number | undefined;
+  node_id?: string | undefined;
+  url?: string | undefined;
+  name?: string | undefined;
+  description?: string | null | undefined;
+  color?: string | null | undefined;
+  default?: boolean | undefined;
+};
+
+// get a list of all unique label names sorted alphabetically and make sure label is not a string
+const allLabels = posts
+  .map((post) => post.labels)
+  .flat()
+  .reduce((acc: Label[], label) => {
+    if (typeof label !== "string" && !acc.find((l) => l.name === label.name)) {
+      acc.push(label);
+    }
+    return acc;
+  }, [])
+  .sort((a, b) => {
+    if (a.name !== undefined && b.name !== undefined) {
+      return a.name.localeCompare(b.name);
+    } else {
+      return 0;
+    }
+  });
+---
+
+<BaseLayout>
+  <h2>Tags</h2>
+  <p>A list of all the tags used on this site</p>
+  {
+    allLabels.length > 0 ? (
+      <ul class="flex flex-col gap-y-2">
+        {allLabels.map((label) => (
+          <li>
+            <a
+              href={`/tags/${label.name}`}
+              class="text-gray-500 hover:text-gray-700"
+            >
+              {label.name}
+            </a>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-center text-gray-500">No posts with tags</p>
+    )
+  }
+</BaseLayout>
