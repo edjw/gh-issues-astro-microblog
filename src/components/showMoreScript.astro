@@ -5,21 +5,23 @@
 
   allPosts.forEach((post) => {
     const postContent = post.querySelector("div.postContent") as HTMLDivElement;
+    if (!postContent) return;
+
     const showMoreButtonWrapper = post.querySelector(
       "div.showMoreButtonWrapper"
     ) as HTMLDivElement;
+    if (!showMoreButtonWrapper) return;
+
     const showMoreButton = showMoreButtonWrapper.querySelector(
       "button"
     ) as HTMLButtonElement;
-    if (!postContent) return;
-    if (!showMoreButtonWrapper) return;
     if (!showMoreButton) return;
 
     const postHeight = postContent.getBoundingClientRect().height;
 
-    if (postHeight > 300) {
-      showMoreButtonWrapper.classList.remove("hidden");
-    }
+    if (postHeight < 300) return;
+
+    showMoreButtonWrapper.classList.remove("hidden");
 
     showMoreButton.addEventListener("click", () => {
       postContent.classList.remove("max-h-80");

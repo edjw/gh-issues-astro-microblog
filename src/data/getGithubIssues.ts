@@ -18,10 +18,13 @@ if (!GITHUB_TOKEN) {
 
 const labelsToExclude = ["draft", "no-publish"];
 
-export async function getGithubIssues(
-  specificIssueNumber?: number,
-  page: number = 1
-): Promise<GithubIssueWithSlug[]> {
+export async function getGithubIssues({
+  specificIssueNumber = undefined,
+  page = "1",
+}: {
+  specificIssueNumber?: number;
+  page?: string;
+}): Promise<GithubIssueWithSlug[]> {
   if (specificIssueNumber) {
     const { data } = await request(
       "GET /repos/{owner}/{repo}/issues/{issue_number}",
@@ -41,7 +44,7 @@ export async function getGithubIssues(
       repo: repoName,
       state: postsState,
       creator: repoOwner,
-      page,
+      page: Number(page),
       headers: {
         authorization: `token ${GITHUB_TOKEN}`,
       },
@@ -73,7 +76,7 @@ function processData(data: GithubIssue[]): GithubIssueWithSlug[] {
       return true;
     });
 
-  // Only keep issues that have a body if showTitles is false
+  // If showTitles is false, discard issues that don't have a body
   if (!showTitles) {
     processedData = processedData.filter(
       (issue) =>

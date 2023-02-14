@@ -1,6 +1,3 @@
-
-Pagination, switch to page 2, 3, 4 etc
-
 add social images with vercel og-image
 
 --
