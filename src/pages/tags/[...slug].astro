@@ -1,4 +1,10 @@
 ---
+import { showTags } from "../../consts";
+
+if (!showTags) {
+    return Astro.redirect("/");
+}
+
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Post from "../../components/Post.astro";
 import ShowMoreScript from "../../components/showMoreScript.astro";
@@ -6,7 +12,7 @@ import ShowMoreScript from "../../components/showMoreScript.astro";
 import { getGithubIssues } from "../../data/getGithubIssues";
 import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
 const { slug } = Astro.params;
-const posts: GithubIssueWithSlug[] = await getGithubIssues();
+const posts: GithubIssueWithSlug[] = await getGithubIssues({});
 
 // // find all the posts where the slug matches the label name
 const tagPosts = posts.filter((post: GithubIssueWithSlug) => {

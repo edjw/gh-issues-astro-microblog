@@ -1,10 +1,16 @@
 ---
+import { showTags } from "../../consts";
+
+if (!showTags) {
+    return Astro.redirect("/");
+}
+
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 import { getGithubIssues } from "../../data/getGithubIssues";
 import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
 
-const posts: GithubIssueWithSlug[] = await getGithubIssues();
+const posts: GithubIssueWithSlug[] = await getGithubIssues({});
 
 export type Label = {
   id?: number | undefined;
