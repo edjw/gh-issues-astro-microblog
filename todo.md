@@ -1,5 +1,5 @@
 add social images with vercel og-image
-
+favicon and default placeholder image
 --
 nice-to-haves
 
