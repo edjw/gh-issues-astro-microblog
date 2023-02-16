@@ -26,7 +26,8 @@ const tagPosts = posts.filter((post: GithubIssueWithSlug) => {
   });
 });
 
-if (tagPosts === undefined) return Astro.redirect("/404");
+
+if (tagPosts === undefined || tagPosts.length === 0) return Astro.redirect("/404");
 ---
 
 <BaseLayout title={`${slug}`} description={`All the posts tagged as ${slug}`}>

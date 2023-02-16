@@ -15,7 +15,7 @@ export const postsState: postsStateType = "open";
 // a microblog and true if you're doing a blog
 export const showTitles: showTitlesType = false;
 
-export const showTags: showTagsType = false;
+export const showTags: showTagsType = true;
 
 type postsStateType = "open" | "closed" | "all";
 type showTitlesType = boolean;
