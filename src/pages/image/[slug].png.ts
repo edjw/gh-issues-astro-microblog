@@ -36,7 +36,7 @@ export async function get({ params }: APIContext) {
   }
 
   const pageIsBlogPost = blogPostRegex.test(slug);
-  console.log({ pageIsBlogPost });
+
   let date = "";
   let title = "";
   let created_at = "";
