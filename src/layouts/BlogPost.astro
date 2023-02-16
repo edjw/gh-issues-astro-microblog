@@ -23,7 +23,8 @@ const { title, body, created_at, updated_at, html_url, labels, slug } = Astro.pr
         )
       }
     </div>
-    <div class="flex flex-col gap-y-4 px-4 py-4 bg-gray-200 dark:bg-gray-700">
+
+    <div class="flex flex-col gap-y-4 px-4 py-4 bg-gray-200 dark:bg-gray-700 w-full self-start">
       {
         labels !== undefined && labels.length > 0 && (
           <div class="flex sm:items-center flex-col sm:flex-row gap-x-2">
