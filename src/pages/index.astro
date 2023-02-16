@@ -1,39 +1,41 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-import { getGithubIssues } from "../data/getGithubIssues";
+import { getAllGithubIssues } from "../data/getGithubIssues";
 import type { GithubIssueWithSlug } from "../data/getGithubIssues";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Post from "../components/Post.astro";
 import ShowMoreScript from "../components/showMoreScript.astro";
 
-const pageParam = Astro.url.searchParams.get("page");
+let pageParam:string;
+pageParam = Astro.url.searchParams.get("page") || "1";
 
-if (pageParam && isNaN(Number(pageParam))) {
-  return Astro.redirect("/");
+
+// if (pageParam && isNaN(Number(pageParam))) {
+//   return Astro.redirect("/");
+// }
+
+// if (pageParam && Number(pageParam) < 2) {
+//   return Astro.redirect("/");
+// }
+
+const posts: GithubIssueWithSlug[] = await getAllGithubIssues(
+{ page: Number(pageParam)}
+);
+
+const nextPagePosts: GithubIssueWithSlug[] = await getAllGithubIssues(
+   { page: (Number(pageParam) + 1)
 }
-
-if (pageParam && Number(pageParam) < 2) {
-  return Astro.redirect("/");
-}
-
-const posts: GithubIssueWithSlug[] = await getGithubIssues({
-  page: pageParam || undefined,
-});
-
-const nextPagePosts: GithubIssueWithSlug[] = await getGithubIssues({
-  page: pageParam ? String(Number(pageParam) + 1) : undefined,
-});
+);
 
 const numberOfNextPagePosts = nextPagePosts.length;
-
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
   {
     posts.length > 0 ? (
       <>
-        <ul class="flex flex-col gap-y-12 pl-0 max-w-prose">
+        <ul class="flex flex-col gap-y-8 pl-0 max-w-prose">
           {posts.map(({ title, slug, created_at, body, labels }) => {
             if (typeof labels === "string") return false;
             return (
@@ -48,23 +50,13 @@ const numberOfNextPagePosts = nextPagePosts.length;
           })}
         </ul>
 
-        {
-          // This kind of reveals a bug of sorts. We only fetch a maximum of 30 posts at a time. We filter out some of those based on 'draft' label or if the issue doesn't have a body while we're not showing titles. So this means some pages will have 30 posts and some might have less. The only way to fix this is to fetch absolutely all the posts, filter them, and then divide them evenly into pages. Not fixing this. Would be do-able if I fetched the posts and put them into a database of some kind, but I don't want to do that.
-          numberOfNextPagePosts > 0 && (
-            // <div class="bg-gray-600 rounded hover:shadow-lg max-w-fit mx-auto  py-4 px-8">
-
-            //     <a
-            //       href={`/?page=${Number(pageParam || 1) + 1}`}
-            //       class="no-underline text-white"
-            //     >
-            //       Show more &#8594;
-            //     </a>
-                   <div class="bg-gray-600 rounded py-1 px-2 hover:shadow-lg max-w-fit mx-auto">
-            <button class="text-white morePostsButton">More posts &#8594</button>
+        {numberOfNextPagePosts > 0 && (
+          <div class="bg-gray-600 rounded py-1 px-2 hover:shadow-lg max-w-fit mx-auto">
+            <button class="text-white morePostsButton">
+              More posts &#8594
+            </button>
           </div>
-            // </div>
-          )
-        }
+        )}
       </>
     ) : (
       <p class="text-center text-gray-500">No posts yet</p>
@@ -74,12 +66,11 @@ const numberOfNextPagePosts = nextPagePosts.length;
 
 <ShowMoreScript />
 
-<script>
+<script define:vars={{pageParam}}>
   const morePostsButton = document.querySelector("button.morePostsButton");
   if (morePostsButton !== null) {
-  const pageParam = new URLSearchParams(window.location.search).get("page");
-  morePostsButton.addEventListener("click", () => {
-    window.location.href = `/?page=${Number(pageParam || 1) + 1}`;
-  });
-}
+    morePostsButton.addEventListener("click", () => {
+      window.location.href = `/?page=${Number(pageParam || 1) + 1}`;
+    });
+  }
 </script>

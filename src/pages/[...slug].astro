@@ -1,13 +1,30 @@
 ---
 import BlogPost from "../layouts/BlogPost.astro";
 
-import { getGithubIssues } from "../data/getGithubIssues";
+import { getSingleGithubIssue } from "../data/getGithubIssues";
 import type { GithubIssueWithSlug } from "../data/getGithubIssues";
 
-const { number, slug } = Astro.params;
-const posts: GithubIssueWithSlug[] = await getGithubIssues(Number(number));
+const { slug } = Astro.params;
 
-const page = posts.find((post) => post.slug === slug);
+function isEmpty(obj: any) {
+    return Object.keys(obj).length === 0;
+}
+
+let number: string | undefined;
+let page: GithubIssueWithSlug | undefined;
+
+if (slug !== undefined) {
+    number = slug.split("-")[0];
+}
+
+if (number !== undefined) {
+    const post = await getSingleGithubIssue(Number(number));
+
+    if (!isEmpty(post) && post.slug !== undefined && post.slug === slug) {
+        page = post;
+    }
+}
+
 if (page === undefined) return Astro.redirect("/404");
 ---
 

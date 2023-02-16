@@ -5,6 +5,7 @@ import { showTags, showTitles } from "../consts";
 import { formatDate } from "../utils/formatDate";
 
 import type { Label } from "../pages/tags/index.astro";
+
 type Props = {
   title: string;
   slug: string;
@@ -17,9 +18,11 @@ const { title, slug, created_at, body, labels } = Astro.props;
 ---
 
 <li
-  class="flex flex-col relative border hover:shadow-xl p-0 rounded-lg gap-y-8 overflow-hidden postWrapper"
+  class="flex flex-col relative border hover:shadow-xl p-0 rounded-lg gap-y-8 my-0 overflow-hidden postWrapper"
 >
-  <a href={`/${slug}/`} class="mt-0 text-right absolute right-2 top-2">
+  <a
+    href={`/${slug}/`}
+   class="mt-0 text-right absolute right-2 top-2">
     <span class="sr-only">Link to post</span>
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -60,6 +63,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
   >
     {
       body !== null && body !== undefined && (
+
         <div class="absolute left-[30px] -top-12 showMoreButtonWrapper hidden">
           <div class="bg-gray-600 rounded py-1 px-2 hover:shadow-lg">
             <button class="text-white">Show more &#8595;</button>
@@ -69,7 +73,10 @@ const { title, slug, created_at, body, labels } = Astro.props;
     }
 
     <p class="my-0 text-sm" title={formatDate(created_at)}>
-      <a href={`/${slug}/`} class="no-underline hover:underline font-normal">
+      <a
+      href={`/${slug}/`}
+        class="no-underline hover:underline font-normal"
+      >
         <RelativeDate date={created_at} />
       </a>
     </p>

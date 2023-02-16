@@ -7,10 +7,12 @@ if (!showTags) {
 
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-import { getGithubIssues } from "../../data/getGithubIssues";
+import { getAllGithubIssues } from "../../data/getGithubIssues";
 import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
 
-const posts: GithubIssueWithSlug[] = await getGithubIssues({});
+const posts: GithubIssueWithSlug[] = await getAllGithubIssues(
+  {per_page: 100}
+  );
 
 export type Label = {
   id?: number | undefined;
@@ -49,7 +51,7 @@ const allLabels = posts
   <p>A list of all the tags used on this site</p>
   {
     allLabels.length > 0 ? (
-      <ul class="flex flex-col gap-y-2 list-none pl-0">
+      <ul class="flex flex-col gap-y-4 list-none pl-0">
         {allLabels.map((label) => (
           <li>
             <a

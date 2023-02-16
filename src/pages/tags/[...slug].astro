@@ -9,10 +9,12 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Post from "../../components/Post.astro";
 import ShowMoreScript from "../../components/showMoreScript.astro";
 
-import { getGithubIssues } from "../../data/getGithubIssues";
+import { getAllGithubIssues } from "../../data/getGithubIssues";
 import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
 const { slug } = Astro.params;
-const posts: GithubIssueWithSlug[] = await getGithubIssues({});
+
+// Get as many posts as possible
+const posts: GithubIssueWithSlug[] = await getAllGithubIssues({per_page: 100});
 
 // // find all the posts where the slug matches the label name
 const tagPosts = posts.filter((post: GithubIssueWithSlug) => {
@@ -39,7 +41,7 @@ if (tagPosts === undefined) return Astro.redirect("/404");
   </p>
   {
     tagPosts !== undefined && tagPosts.length > 0 ? (
-      <ul class="flex flex-col gap-y-6 pl-0">
+      <ul class="flex flex-col gap-y-8 pl-0">
         {tagPosts.map(({ title, slug, created_at, body, labels }) => {
           if (typeof labels === "string") return false;
           return (

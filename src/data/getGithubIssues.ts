@@ -18,38 +18,54 @@ if (!GITHUB_TOKEN) {
 
 const labelsToExclude = ["draft", "no-publish"];
 
-export async function getGithubIssues({
-  specificIssueNumber = undefined,
-  page = "1",
+export async function getAllGithubIssues({
+  page = 1,
+  per_page = 30,
 }: {
-  specificIssueNumber?: number;
-  page?: string;
-}): Promise<GithubIssueWithSlug[]> {
-  if (specificIssueNumber) {
-    const { data } = await request(
-      "GET /repos/{owner}/{repo}/issues/{issue_number}",
-      {
-        owner: repoOwner,
-        repo: repoName,
-        issue_number: specificIssueNumber,
-        headers: {
-          authorization: `token ${GITHUB_TOKEN}`,
-        },
-      }
-    );
-    return processData(data ? [data] : ([] as GithubIssueWithSlug[]));
-  } else {
+  page?: number;
+  per_page?: number;
+} = {}): Promise<GithubIssueWithSlug[]> {
+  try {
     const { data } = await request("GET /repos/{owner}/{repo}/issues", {
       owner: repoOwner,
       repo: repoName,
       state: postsState,
       creator: repoOwner,
-      page: Number(page),
+      page,
+      per_page,
       headers: {
         authorization: `token ${GITHUB_TOKEN}`,
       },
     });
     return processData(data);
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+export async function getSingleGithubIssue(
+  issueNumber: number
+): Promise<GithubIssueWithSlug> {
+  if (!issueNumber) return {} as GithubIssueWithSlug;
+
+  try {
+    const { data } = await request(
+      "GET /repos/{owner}/{repo}/issues/{issue_number}",
+      {
+        owner: repoOwner,
+        repo: repoName,
+        issue_number: issueNumber,
+        headers: {
+          authorization: `token ${GITHUB_TOKEN}`,
+        },
+      }
+    );
+
+    return processData(data ? [data] : ([] as GithubIssueWithSlug[]))[0];
+  } catch (error) {
+    console.error(error);
+    return {} as GithubIssueWithSlug;
   }
 }
 

@@ -1,8 +1,10 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import { getGithubIssues } from "../data/getGithubIssues";
-const posts = await getGithubIssues({});
+import { getAllGithubIssues } from "../data/getGithubIssues";
+const posts = await getAllGithubIssues({
+  per_page: 100,
+});
 import { parseMD } from "../utils/parseMD";
 
 export async function get(context: APIContext) {

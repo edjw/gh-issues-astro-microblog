@@ -6,11 +6,11 @@ import { parseMD } from "../utils/parseMD";
 import BaseLayout from "./BaseLayout.astro";
 import { showTitles } from "../consts";
 
-const isDev = process.env.NODE_ENV === "development";
+const isDev = import.meta.env.MODE === "development";
 
 type Props = GithubIssueWithSlug;
 
-const { title, body, created_at, updated_at, labels, html_url } = Astro.props;
+const { title, body, created_at, updated_at, html_url, labels, number } = Astro.props;
 ---
 
 <BaseLayout title={title} description={title}>
