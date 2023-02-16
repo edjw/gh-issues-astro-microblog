@@ -16,16 +16,21 @@
     "@astrojs/vercel": "^3.1.1",
     "@fontsource/raleway": "^4.5.12",
     "@octokit/request": "^6.2.3",
+    "@resvg/resvg-js": "^2.4.1",
     "@tailwindcss/typography": "^0.5.9",
     "astro": "^2.0.10",
     "marked": "^4.2.12",
     "sanitize-html": "^2.9.0",
+    "satori": "^0.3.1",
+    "satori-html": "^0.3.2",
+    "sharp": "^0.31.3",
     "slugify": "^1.6.5",
     "tailwindcss": "^3.0.24"
   },
   "devDependencies": {
     "@octokit/types": "^9.0.0",
     "@types/marked": "^4.0.8",
+    "@types/node": "^18.13.0",
     "@types/sanitize-html": "^2.8.0",
     "prettier": "^2.8.4",
     "prettier-plugin-astro": "^0.8.0"
