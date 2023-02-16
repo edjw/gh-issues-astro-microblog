@@ -2,17 +2,50 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+
 type Props = {
   description: string;
   title: string;
+  slug?: string;
+  image?: string;
 };
-const { description, title } = Astro.props;
+const { description, title, image } = Astro.props;
+
+const pathname = Astro.url.pathname;
+
+let {slug} = Astro.params;
+let socialImage = "";
+
+if (image !== undefined) {
+  socialImage = image;
+}
+
+if (pathname === "/" || slug === undefined) {
+  socialImage = `/image/index.png`;
+}
+
+// It's the tags page
+if (pathname === "/tags") {
+  socialImage = "/image/tagsPage.png";
+}
+
+// It's a tag page
+if (pathname.startsWith("/tags/")) {
+  const tag = pathname.split("/")[2];
+    socialImage = `/image/tags-${tag}.png`;
+}
+
+
+// if (image === undefined) {
+//   socialImage = `/image/${slug}.png`;
+// }
+
 ---
 
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead title={title} description={description} image={socialImage} />
   </head>
   <body
     class="container grid grid-rows-[60px_1fr_80px] grid-cols-1 min-h-[100dvh] max-w-xl mx-auto pt-4 pb-8 px-4 gap-y-12 dark:bg-gray-800 dark:text-white"

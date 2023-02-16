@@ -10,10 +10,10 @@ const isDev = import.meta.env.MODE === "development";
 
 type Props = GithubIssueWithSlug;
 
-const { title, body, created_at, updated_at, html_url, labels, number } = Astro.props;
+const { title, body, created_at, updated_at, html_url, labels, slug } = Astro.props;
 ---
 
-<BaseLayout title={title} description={title}>
+<BaseLayout title={title} description={title} image={`/image/${slug}.png`}>
   <article class="flex flex-col gap-y-28 border rounded-lg">
     <div class="px-4 py-4">
       {showTitles && <h2 class=" mt-0">{title}</h2>}

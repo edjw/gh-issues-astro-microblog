@@ -8,5 +8,7 @@ export default defineConfig({
   site: "https://gh-issues-astro-microblog.netlify.app",
   integrations: [tailwind()],
   output: "server",
-  adapter: vercel(),
+  adapter: vercel({
+    includeFiles: ["./public/fonts/**/*"],
+  }),
 });
