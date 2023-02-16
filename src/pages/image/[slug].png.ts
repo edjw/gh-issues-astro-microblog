@@ -5,8 +5,6 @@ import satori from "satori";
 import { html } from "satori-html";
 import sharp from "sharp";
 
-// import { Resvg } from "@resvg/resvg-js";
-
 import type { APIContext } from "astro";
 import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
 import RalewayRegular from "@fontsource/raleway/files/raleway-latin-400-normal.woff";
@@ -125,16 +123,4 @@ export async function get({ params }: APIContext) {
       "Cache-Control": "s-maxage=1, stale-while-revalidate=59",
     },
   });
-  //   const image = new Resvg(svg, {
-  //     fitTo: {
-  //       mode: "width",
-  //       value: dimensions.width,
-  //     },
-  //   }).render();
-
-  //   return {
-  //     status: 200,
-  //     body: image.asPng(),
-  //     encoding: "binary",
-  //   };
 }

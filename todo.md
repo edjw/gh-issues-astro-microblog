@@ -1,5 +1,9 @@
-add social images with vercel og-image
-favicon and default placeholder image
+make the og image personalised to me
+
+make og image generator work for any page
+
+get favicon working on safari
+
 --
 nice-to-haves
 
