@@ -3,7 +3,9 @@
 
 import satori from "satori";
 import { html } from "satori-html";
-import { Resvg } from "@resvg/resvg-js";
+import sharp from "sharp";
+
+// import { Resvg } from "@resvg/resvg-js";
 
 import type { APIContext } from "astro";
 import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
@@ -113,17 +115,26 @@ export async function get({ params }: APIContext) {
       },
     ],
   });
+  const png = sharp(Buffer.from(svg)).png();
+  const response = await png.toBuffer();
 
-  const image = new Resvg(svg, {
-    fitTo: {
-      mode: "width",
-      value: dimensions.width,
-    },
-  }).render();
-
-  return {
+  return new Response(response, {
     status: 200,
-    body: image.asPng(),
-    encoding: "binary",
-  };
+    headers: {
+      "Content-Type": "image/png",
+      "Cache-Control": "s-maxage=1, stale-while-revalidate=59",
+    },
+  });
+  //   const image = new Resvg(svg, {
+  //     fitTo: {
+  //       mode: "width",
+  //       value: dimensions.width,
+  //     },
+  //   }).render();
+
+  //   return {
+  //     status: 200,
+  //     body: image.asPng(),
+  //     encoding: "binary",
+  //   };
 }

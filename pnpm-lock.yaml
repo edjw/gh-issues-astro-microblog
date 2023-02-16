@@ -13,6 +13,7 @@ specifiers:
   '@types/marked': ^4.0.8
   '@types/node': ^18.13.0
   '@types/sanitize-html': ^2.8.0
+  '@types/sharp': ^0.31.1
   astro: ^2.0.10
   marked: ^4.2.12
   prettier: ^2.8.4
@@ -47,6 +48,7 @@ devDependencies:
   '@types/marked': 4.0.8
   '@types/node': 18.13.0
   '@types/sanitize-html': 2.8.0
+  '@types/sharp': 0.31.1
   prettier: 2.8.4
   prettier-plugin-astro: 0.8.0
 
@@ -1040,6 +1042,12 @@ packages:
     resolution: {integrity: sha512-Uih6caOm3DsBYnVGOYn0A9NoTNe1c4aPStmHC/YA2JrpP9kx//jzaRcIklFvSpvVQEcpl/ZCr4DgISSf/YxTvg==}
     dependencies:
       htmlparser2: 8.0.1
+    dev: true
+
+  /@types/sharp/0.31.1:
+    resolution: {integrity: sha512-5nWwamN9ZFHXaYEincMSuza8nNfOof8nmO+mcI+Agx1uMUk4/pQnNIcix+9rLPXzKrm1pS34+6WRDbDV0Jn7ag==}
+    dependencies:
+      '@types/node': 18.13.0
     dev: true
 
   /@types/unist/2.0.6:
