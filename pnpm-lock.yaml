@@ -5,6 +5,7 @@ specifiers:
   '@astrojs/rss': ^2.1.0
   '@astrojs/tailwind': ^3.0.1
   '@astrojs/vercel': ^3.1.1
+  '@fontsource/raleway': ^4.5.12
   '@octokit/request': ^6.2.3
   '@octokit/types': ^9.0.0
   '@tailwindcss/typography': ^0.5.9
@@ -23,6 +24,7 @@ dependencies:
   '@astrojs/rss': 2.1.0
   '@astrojs/tailwind': 3.0.1_jukmciyu6aodegbctarme2zo2y
   '@astrojs/vercel': 3.1.1_astro@2.0.10
+  '@fontsource/raleway': 4.5.12
   '@octokit/request': 6.2.3
   '@tailwindcss/typography': 0.5.9_tailwindcss@3.2.6
   astro: 2.0.10
