@@ -26,10 +26,8 @@ const { getSingleGithubIssue } = await import("../../data/getGithubIssues");
 export async function get({ params }: APIContext) {
   const { slug } = params;
 
-  // slugs format is 1-first-post, 11-second-post, 283-third-post, 343479-fourth-post-alskdjfsad-lasdfjasd
-
   const blogPostRegex = new RegExp("^[0-9]+-[a-zA-Z0-9-]+[a-zA-Z0-9]$");
-  console.log(slug);
+
   if (slug === undefined) {
     return new Response(null, {
       status: 404,
@@ -38,10 +36,16 @@ export async function get({ params }: APIContext) {
   }
 
   const pageIsBlogPost = blogPostRegex.test(slug);
-
+  console.log({ pageIsBlogPost });
   let date = "";
   let title = "";
   let created_at = "";
+
+  const dateOptions: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
 
   if (pageIsBlogPost) {
     let number: string | undefined;
@@ -71,36 +75,23 @@ export async function get({ params }: APIContext) {
     title = page.title;
     created_at = page.created_at;
 
-    date = new Date(created_at).toLocaleDateString("en-gb", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    date = new Date(created_at).toLocaleDateString("en-gb", dateOptions);
   }
+
+  if (slug === "index") {
+    title = "Ed Johnson-Williams";
+    date = new Date().toLocaleDateString("en-gb", dateOptions);
+  }
+
   if (slug === "tagsPage") {
     title = "Tags – Ed Johnson-Williams";
-    date = new Date().toLocaleDateString("en-gb", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    date = new Date().toLocaleDateString("en-gb", dateOptions);
   }
 
   if (slug.startsWith("tags-")) {
     const tag = slug.split("tags-")[1];
     title = `Posts tagged as #${tag}`;
-    date = new Date().toLocaleDateString("en-gb", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  } else {
-    title = "Ed Johnson-Williams";
-    date = new Date().toLocaleDateString("en-gb", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    date = new Date().toLocaleDateString("en-gb", dateOptions);
   }
 
   const markup = html`<div class="bg-gray-100 flex flex-col w-full h-full">
