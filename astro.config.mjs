@@ -9,6 +9,9 @@ export default defineConfig({
   integrations: [tailwind()],
   output: "server",
   adapter: vercel({
-    includeFiles: ["./public/fonts/**/*"],
+    includeFiles: [
+      "./public/fonts/Raleway-Regular.ttf",
+      "./public/fonts/Raleway-Bold.ttf",
+    ],
   }),
 });
