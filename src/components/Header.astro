@@ -4,11 +4,11 @@ import ThemeSwitcher from "../components/ThemeSwitcher.astro";
 import { SITE_TITLE, MAIN_WEBSITE_URL } from "../consts";
 ---
 
-<header class="flex gap-x-4 sm:gap-x-8 items-center justify-between">
+<header class="flex gap-x-6 sm:gap-x-8 items-center justify-between">
   <h1 class="underline hover:no-underline text-normal text-lg">
     <a href="/">{SITE_TITLE}</a>
   </h1>
-  <nav>
+  <nav class="leading-tight">
     <HeaderLink
       href={MAIN_WEBSITE_URL}
       class={`hover:underline flex flex-row items-center`}
