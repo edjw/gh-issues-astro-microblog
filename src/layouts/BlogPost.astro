@@ -11,6 +11,7 @@ const isDev = import.meta.env.MODE === "development";
 type Props = GithubIssueWithSlug;
 
 const { title, body, created_at, updated_at, html_url, labels, slug } = Astro.props;
+
 ---
 
 <BaseLayout title={title} description={title} image={`/image/${slug}.png`}>
