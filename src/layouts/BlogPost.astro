@@ -19,7 +19,7 @@ const { title, body, created_at, updated_at, html_url, labels, slug } = Astro.pr
       {showTitles && <h2 class=" mt-0">{title}</h2>}
       {
         body !== undefined && body !== null && (
-          <div class="" set:html={parseMD(body)} />
+          <Fragment class="" set:html={parseMD(body)} />
         )
       }
     </div>
