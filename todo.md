@@ -1,4 +1,4 @@
-get favicon working on safari
+
 
 --
 nice-to-haves
