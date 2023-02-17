@@ -5,7 +5,7 @@ const options = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "video", "source"]),
   allowedAttributes: {
   video: [ 'src'],
-source: [ 'src' ],
+source: [ 'src', 'type' ],
 },
 
 };
