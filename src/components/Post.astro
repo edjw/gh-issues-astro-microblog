@@ -39,7 +39,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
       ></path>
     </svg>
   </a>
-  <div class="px-8 pt-4 max-h-80 contentWrapper">
+  <div class="px-8 pt-4 max-h-96 contentWrapper">
     {
       showTitles && (
         <h2 class="font-semibold text-lg mt-0">
@@ -51,7 +51,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
     {
       body !== null && body !== undefined && (
         <div
-          class="prose dark:prose-invert postContent"
+          class="prose dark:prose-invert max-h-full postContent"
           set:html={parseMD(body)}
         />
       )

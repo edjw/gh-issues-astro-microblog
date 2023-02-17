@@ -11,6 +11,8 @@ type Props = {
 };
 const { description, title, image } = Astro.props;
 
+
+// Some things to get the right data to the OG image generator
 const pathname = Astro.url.pathname;
 
 let {slug} = Astro.params;
@@ -35,11 +37,6 @@ if (pathname.startsWith("/tags/")) {
     socialImage = `/image/tags-${tag}.png`;
 }
 
-
-// if (image === undefined) {
-//   socialImage = `/image/${slug}.png`;
-// }
-
 ---
 
 <!DOCTYPE html>
@@ -48,7 +45,7 @@ if (pathname.startsWith("/tags/")) {
     <BaseHead title={title} description={description} image={socialImage} />
   </head>
   <body
-    class="container grid grid-rows-[60px_1fr_120px] grid-cols-1 min-h-[100dvh] max-w-xl mx-auto pt-4 pb-8 px-4 gap-y-12 dark:bg-gray-800 dark:text-white"
+    class="container grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-[100dvh] max-w-xl mx-auto pt-4 pb-8 px-4 gap-y-12 dark:bg-gray-800 dark:text-white"
   >
     <Header />
     <main class="prose dark:prose-invert">
