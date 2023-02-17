@@ -1,31 +1,39 @@
 <script is:inline>
-  const allPosts = Array.from(
-    document.querySelectorAll("li.postWrapper")
-  );
+  function main() {
+    const allPosts = Array.from(document.querySelectorAll("li.postWrapper"));
 
-  allPosts.forEach((post) => {
-    const postContent = post.querySelector("div.postContent");
-    if (!postContent) return;
+    allPosts.forEach((post) => {
+      const contentWrapper = post.querySelector("div.contentWrapper");
+      if (!contentWrapper) return;
 
-    const showMoreButtonWrapper = post.querySelector(
-      "div.showMoreButtonWrapper"
-    );
-    if (!showMoreButtonWrapper) return;
+      const postContent = post.querySelector("div.postContent");
+      if (!postContent) return;
 
-    const showMoreButton = showMoreButtonWrapper.querySelector(
-      "button"
-    );
-    if (!showMoreButton) return;
+      const showMoreButtonWrapper = post.querySelector(
+        "div.showMoreButtonWrapper"
+      );
+      if (!showMoreButtonWrapper) return;
 
-    const postHeight = postContent.getBoundingClientRect().height;
+      const showMoreButton = showMoreButtonWrapper.querySelector("button");
+      if (!showMoreButton) return;
 
-    if (postHeight < 300) return;
+      const contentWrapperHeight = contentWrapper.offsetHeight;
+      const postContentHeight = postContent.scrollHeight;
 
-    showMoreButtonWrapper.classList.remove("hidden");
+      if (postContentHeight <= contentWrapperHeight) return;
 
-    showMoreButton.addEventListener("click", () => {
-      postContent.classList.remove("max-h-80");
-      showMoreButtonWrapper.classList.add("hidden");
+      showMoreButtonWrapper.classList.remove("hidden");
+
+      showMoreButton.addEventListener("click", () => {
+        contentWrapper.classList.remove("max-h-80");
+        showMoreButtonWrapper.classList.add("hidden");
+      });
     });
-  });
+  }
+
+  document.onreadystatechange = () => {
+    if (document.readyState === "complete") {
+      main();
+    }
+  };
 </script>

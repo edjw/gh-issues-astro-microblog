@@ -10,7 +10,7 @@ const isURLVideo = (url: string): Boolean => {
 const renderer = new marked.Renderer();
 renderer.link = (href, title, text): string => {
   if (href !== null && isURLVideo(href)) {
-    return `<video controls>
+    return `<video controls muted preload="metadata">
               <source src="${href}" type="video/mp4">
             </video>`;
   } else if (title !== null && title !== undefined) {
@@ -29,7 +29,7 @@ const sanitizeHTMLOptions: sanitizeHtml.IOptions = {
     "source",
   ]),
   allowedAttributes: {
-    video: ["src", "controls", "type", "muted", "autoplay"],
+    video: ["src", "controls", "type", "muted", "autoplay", "preload"],
     source: ["src", "type"],
     img: ["src", "alt"],
     a: ["href", "title"],
