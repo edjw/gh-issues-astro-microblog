@@ -2,9 +2,10 @@ import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
 
 const options = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "video"]),
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "video", "source"]),
   allowedAttributes: {
   video: [ 'src'],
+source: [ 'src' ],
 },
 
 };
