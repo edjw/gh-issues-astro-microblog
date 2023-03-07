@@ -16,3 +16,5 @@ If want to use a private repo for the issues, need to use a classic token with r
 $$
 
 $$
+
+vercel_deploy_hook to the repo with the issues in with the example yml github actions file
