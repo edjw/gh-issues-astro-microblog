@@ -1,20 +1,33 @@
 ---
-import { showTags } from "../../consts";
+import { showTags } from "@/consts";
 
 if (!showTags) {
-    return Astro.redirect("/");
+  return Astro.redirect("/");
 }
 
-import BaseLayout from "../../layouts/BaseLayout.astro";
-import Post from "../../components/Post.astro";
-import ShowMoreScript from "../../components/showMoreScript.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import Post from "@/components/Post.astro";
+import ShowMoreScript from "@/components/showMoreScript.astro";
 
-import { getAllGithubIssues } from "../../data/getGithubIssues";
-import type { GithubIssueWithSlug } from "../../data/getGithubIssues";
+import { fetchAllIssueLabels } from "@/data/fetchAllIssueLabels";
+import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
+
+import { fetchAllGithubIssues } from "@/data/fetchAllGithubIssues";
+
+export async function getStaticPaths() {
+  const allTags = await fetchAllIssueLabels();
+
+  return allTags.map((label) => ({
+    params: { slug: label.name },
+    props: label,
+  }));
+}
 const { slug } = Astro.params;
 
-// Get as many posts as possible
-const posts: GithubIssueWithSlug[] = await getAllGithubIssues({per_page: 100});
+// const post = Astro.props as Label;
+
+// // Get as many posts as possible
+const posts = await fetchAllGithubIssues();
 
 // // find all the posts where the slug matches the label name
 const tagPosts = posts.filter((post: GithubIssueWithSlug) => {
@@ -26,8 +39,8 @@ const tagPosts = posts.filter((post: GithubIssueWithSlug) => {
   });
 });
 
-
-if (tagPosts === undefined || tagPosts.length === 0) return Astro.redirect("/404");
+// if (tagPosts === undefined || tagPosts.length === 0)
+//   return Astro.redirect("/404");
 ---
 
 <BaseLayout title={`${slug}`} description={`All the posts tagged as ${slug}`}>
@@ -42,7 +55,7 @@ if (tagPosts === undefined || tagPosts.length === 0) return Astro.redirect("/404
   </p>
   {
     tagPosts !== undefined && tagPosts.length > 0 ? (
-      <ul class="flex flex-col gap-y-8 pl-0">
+      <ul class="flex flex-col pl-0 gap-y-8">
         {tagPosts.map(({ title, slug, created_at, body, labels }) => {
           if (typeof labels === "string") return false;
           return (
