@@ -1,15 +1,14 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import BaseLayout from "@/layouts/BaseLayout.astro";
 
-import { getAllGithubIssues } from "../data/getGithubIssues";
-import type { GithubIssueWithSlug } from "../data/getGithubIssues";
+import { fetchMultipleGithubIssues } from "@/data/fetchMultipleGithubIssues";
+import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
-import Post from "../components/Post.astro";
-import ShowMoreScript from "../components/showMoreScript.astro";
+import Post from "@/components/Post.astro";
+import ShowMoreScript from "@/components/showMoreScript.astro";
 
-let pageParam:string;
+let pageParam: string;
 pageParam = Astro.url.searchParams.get("page") || "1";
-
 
 // if (pageParam && isNaN(Number(pageParam))) {
 //   return Astro.redirect("/");
@@ -19,23 +18,24 @@ pageParam = Astro.url.searchParams.get("page") || "1";
 //   return Astro.redirect("/");
 // }
 
-const posts: GithubIssueWithSlug[] = await getAllGithubIssues(
-{ page: Number(pageParam)}
-);
+const posts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(pageParam);
 
-const nextPagePosts: GithubIssueWithSlug[] = await getAllGithubIssues(
-   { page: (Number(pageParam) + 1)
-}
+const nextPagePosts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(
+  String(Number(pageParam) + 1)
 );
 
 const numberOfNextPagePosts = nextPagePosts.length;
 ---
 
-<BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+<BaseLayout
+  title={SITE_TITLE}
+  description={SITE_DESCRIPTION}
+  image={`/image/index.png`}
+>
   {
     posts.length > 0 ? (
       <>
-        <ul class="flex flex-col gap-y-8 pl-0 max-w-prose">
+        <ul class="flex flex-col pl-0 gap-y-8 max-w-prose">
           {posts.map(({ title, slug, created_at, body, labels }) => {
             if (typeof labels === "string") return false;
             return (
@@ -51,7 +51,7 @@ const numberOfNextPagePosts = nextPagePosts.length;
         </ul>
 
         {numberOfNextPagePosts > 0 && (
-          <div class="bg-gray-600 rounded py-1 px-2 hover:shadow-lg max-w-fit mx-auto">
+          <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
             <button class="text-white morePostsButton">
               More posts &#8594
             </button>
@@ -66,7 +66,7 @@ const numberOfNextPagePosts = nextPagePosts.length;
 
 <ShowMoreScript />
 
-<script define:vars={{pageParam}}>
+<script define:vars={{ pageParam }}>
   const morePostsButton = document.querySelector("button.morePostsButton");
   if (morePostsButton !== null) {
     morePostsButton.addEventListener("click", () => {

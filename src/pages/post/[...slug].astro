@@ -1,0 +1,42 @@
+---
+import BlogPost from "@/layouts/BlogPost.astro";
+
+import { fetchAllGithubIssues } from "@/data/fetchAllGithubIssues";
+import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
+
+export async function getStaticPaths() {
+  const allPages = await fetchAllGithubIssues();
+
+  return allPages.map((post) => ({
+    params: { slug: post.slug },
+    props: post,
+  }));
+}
+
+const post = Astro.props as GithubIssueWithSlug;
+
+// function isEmpty(obj: any) {
+//   return Object.keys(obj).length === 0;
+// }
+
+// let number: string | undefined;
+// let page: GithubIssueWithSlug | undefined;
+
+// if (slug !== undefined) {
+//   number = slug.split("-")[0];
+// }
+
+// if (number !== undefined) {
+//   const post = await getSingleGithubIssue(Number(number));
+
+//   if (!isEmpty(post) && post.slug !== undefined && post.slug === slug) {
+//     page = post;
+//   }
+// }
+
+// if (page === undefined) return Astro.redirect("/404");
+---
+
+<!-- title, body, created_at, updated_at, html_url, labels, slug -->{
+  post && <BlogPost {...post} />
+}

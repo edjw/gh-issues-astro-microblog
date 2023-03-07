@@ -1,17 +1,16 @@
 ---
-import type { GithubIssueWithSlug } from "../data/getGithubIssues";
+import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
 
-import FormattedDate from "../components/FormattedDate.astro";
-import { parseMD } from "../utils/parseMD";
-import BaseLayout from "./BaseLayout.astro";
-import { showTitles } from "../consts";
+import FormattedDate from "@/components/FormattedDate.astro";
+import { parseMD } from "@/utils/parseMD";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { showTitles } from "@/consts";
 
 const isDev = import.meta.env.MODE === "development";
 
 type Props = GithubIssueWithSlug;
-
-const { title, body, created_at, updated_at, html_url, labels, slug } = Astro.props;
-
+const post = Astro.props;
+const { title, body, created_at, updated_at, html_url, labels, slug } = post;
 ---
 
 <BaseLayout title={title} description={title} image={`/image/${slug}.png`}>
@@ -25,7 +24,9 @@ const { title, body, created_at, updated_at, html_url, labels, slug } = Astro.pr
       }
     </div>
 
-    <div class="flex flex-col gap-y-4 px-4 py-4 bg-gray-200 dark:bg-gray-700 w-full self-start rounded-b-lg">
+    <div
+      class="flex flex-col gap-y-4 px-4 py-4 bg-gray-200 dark:bg-gray-700 w-full self-start rounded-b-lg"
+    >
       {
         labels !== undefined && labels.length > 0 && (
           <div class="flex sm:items-center flex-col sm:flex-row gap-x-2">
