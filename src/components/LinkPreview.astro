@@ -1,0 +1,47 @@
+---
+import { Image } from "@astrojs/image/components";
+import probeImageSize from "probe-image-size";
+
+import metaParser from "metascraper";
+import metascraperDescription from "metascraper-description";
+import metascraperTitle from "metascraper-title";
+import metascraperImage from "metascraper-image";
+import metascraperAuthor from "metascraper-author";
+
+const metascraper = metaParser([
+  metascraperAuthor(),
+  metascraperImage(),
+  metascraperDescription(),
+  metascraperTitle(),
+]);
+
+type Props = {
+  linkURL: string;
+};
+
+const { linkURL } = Astro.props;
+
+const html = await fetch(linkURL).then((res) => res.text());
+const { title, description, image, author } = await metascraper({
+  html,
+  url: linkURL,
+});
+
+const { width, height } = await probeImageSize(image);
+---
+
+<a href={linkURL} class="no-underline font-normal not-prose">
+  <section
+    class="border border-gray-100 dark:border-gray-600 rounded px-4 py-4 flex flex-col gap-y-4"
+  >
+    <!-- It'd be nice if metascraper would give the alt for the image -->
+    <Image src={image} width={width} height={height} alt="" />
+    <div>
+      <h3 class="leading-tight font-semibold">{title}</h3>
+      <p class="leading-normal text-gray-600 dark:text-gray-300 text-sm">
+        {author}
+      </p>
+    </div>
+    <p class="leading-snug">{description}</p>
+  </section>
+</a>
