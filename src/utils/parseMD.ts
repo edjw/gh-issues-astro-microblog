@@ -1,8 +1,8 @@
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
 
-const videoFileTypes = [".mov", ".mp4", ".webm", ".ogg"];
-const isURLVideo = (url: string): Boolean => {
+const videoFileTypes = [".mov", ".mp4"];
+const isURLVideo = (url: string): boolean => {
   const fileType = url.substring(url.lastIndexOf(".")).toLowerCase();
   return videoFileTypes.includes(fileType);
 };
