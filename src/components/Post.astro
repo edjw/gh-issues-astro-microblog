@@ -5,6 +5,7 @@ import { showTags, showTitles } from "../consts";
 import { formatDate } from "../utils/formatDate";
 
 import type { Label } from "../pages/tags/index.astro";
+import LinkPreview from "./LinkPreview.astro";
 
 type Props = {
   title: string;
@@ -15,6 +16,28 @@ type Props = {
 };
 
 const { title, slug, created_at, body, labels } = Astro.props;
+
+let linkPost = false;
+let linkURL = "";
+
+if (labels !== undefined && labels.length > 0) {
+  linkPost = labels.some((label) => {
+    if (typeof label !== "string") {
+      return label.name === "link";
+    } else {
+      return label === "link";
+    }
+  });
+}
+
+const regexMdLinks = /\[([^\[]+)\](\(.*\))/gm;
+
+if (linkPost && body !== undefined && body !== null) {
+  const url = body.match(regexMdLinks)?.join("").split("](")[1].slice(0, -1);
+  if (url !== undefined) {
+    linkURL = url;
+  }
+}
 ---
 
 <li
@@ -46,14 +69,17 @@ const { title, slug, created_at, body, labels } = Astro.props;
       )
     }
 
-    {
-      body !== null && body !== undefined && (
-        <div
-          class="max-h-full prose dark:prose-invert postContent"
-          set:html={parseMD(body)}
-        />
-      )
-    }
+    <div class="postContent">
+      {
+        body !== null && body !== undefined && (
+          <div
+            class="max-h-full prose dark:prose-invert"
+            set:html={parseMD(body)}
+          />
+        )
+      }
+      {linkPost && <LinkPreview linkURL={linkURL} />}
+    </div>
   </div>
 
   <div
