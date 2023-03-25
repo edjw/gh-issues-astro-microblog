@@ -14,7 +14,7 @@ const post = Astro.props;
 const { title, body, created_at, updated_at, html_url, labels, slug } = post;
 
 let linkPost = false;
-let linkURL = "";
+let linkURLs: string[] = [];
 
 if (labels !== undefined && labels.length > 0) {
   linkPost = labels.some((label) => {
@@ -26,12 +26,46 @@ if (labels !== undefined && labels.length > 0) {
   });
 }
 
-const regexMdLinks = /\[([^\[]+)\](\(.*\))/gm;
+const markdownURLRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+
+const urlRegex = /((https?:\/\/)|(www\.))[^\s]+/g;
+
+const isImageURL = (href: string) => {
+  if (
+    href.endsWith(".png") ||
+    href.endsWith(".jpg") ||
+    href.endsWith(".jpeg") ||
+    href.endsWith(".gif")
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 if (linkPost && body !== undefined && body !== null) {
-  const url = body.match(regexMdLinks)?.join("").split("](")[1].slice(0, -1);
-  if (url !== undefined) {
-    linkURL = url;
+  const markdownURLs = [...body.matchAll(markdownURLRegex)];
+
+  const bareURLs = [...body.matchAll(urlRegex)];
+
+  if (markdownURLs.length > 0) {
+    markdownURLs.forEach((url) => {
+      const href = url[2];
+
+      if (isImageURL(href) === false) {
+        linkURLs.push(href);
+      }
+    });
+  }
+
+  if (bareURLs.length > 0) {
+    bareURLs.forEach((url) => {
+      const href = url[0].replace(").", "").replace(")", "");
+
+      if (isImageURL(href) === false) {
+        linkURLs.push(href);
+      }
+    });
   }
 }
 ---
@@ -40,13 +74,15 @@ if (linkPost && body !== undefined && body !== null) {
   <article class="flex flex-col gap-y-16 px-4 border-x border-t rounded-t-lg">
     <div class="px-4 py-4 max-w-full">
       {showTitles && <h2 class=" mt-0">{title}</h2>}
-      {
-        body !== undefined && body !== null && (
-          <Fragment set:html={parseMD(body)} />
-        )
-      }
+      {body !== undefined && body !== null && <div set:html={parseMD(body)} />}
 
-      {linkPost && <LinkPreview linkURL={linkURL} />}
+      {
+        linkPost &&
+          linkURLs.length > 0 &&
+          linkURLs.map((linkURL) => {
+            return <LinkPreview linkURL={linkURL} />;
+          })
+      }
     </div>
   </article>
   <div

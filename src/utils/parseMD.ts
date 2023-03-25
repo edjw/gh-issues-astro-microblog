@@ -8,7 +8,7 @@ const isURLVideo = (url: string): boolean => {
 };
 
 const renderer = new marked.Renderer();
-renderer.link = (href, title, text): string => {
+renderer.link = (href, title, text) => {
   if (href !== null && isURLVideo(href)) {
     return `<div class="flex justify-center"><video controls muted preload="metadata" class="max-h-72 my-0 border dark:border-gray-500">
               <source src="${href}" type="video/mp4">

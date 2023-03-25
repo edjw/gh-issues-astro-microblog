@@ -2,11 +2,12 @@
 import { Image } from "@astrojs/image/components";
 import probeImageSize from "probe-image-size";
 
-import metaParser from "metascraper";
+import metaParser, { Metadata } from "metascraper";
 import metascraperDescription from "metascraper-description";
 import metascraperTitle from "metascraper-title";
 import metascraperImage from "metascraper-image";
 import metascraperAuthor from "metascraper-author";
+import type { ProbeResult } from "probe-image-size";
 
 const metascraper = metaParser([
   metascraperAuthor(),
@@ -21,13 +22,48 @@ type Props = {
 
 const { linkURL } = Astro.props;
 
-const html = await fetch(linkURL).then((res) => res.text());
-const { title, description, image, author } = await metascraper({
+let html = "";
+try {
+  const url = linkURL.replace(").", "").replace(")", "");
+
+  const res = await fetch(url);
+  if (res.ok) {
+    html = await res.text();
+  }
+  if (!res.ok) {
+    throw new Error(`Failed to fetch ${url}`);
+  }
+} catch (err) {
+  console.error(err);
+  return;
+}
+
+let title: string | undefined;
+let description: string | undefined;
+let image: string | undefined;
+let author: string | undefined;
+let linkMetadata: Metadata;
+
+linkMetadata = await metascraper({
   html,
   url: linkURL,
 });
 
-const { width, height } = await probeImageSize(image);
+title = linkMetadata.title || "";
+description = linkMetadata.description || "";
+image = linkMetadata.image || "";
+author = linkMetadata.author || "";
+
+let width = 0;
+let height = 0;
+
+let imageDimensions: ProbeResult;
+
+if (image !== "") {
+  imageDimensions = await probeImageSize(image);
+  width = imageDimensions.width;
+  height = imageDimensions.height;
+}
 ---
 
 <hr class="my-0 h-4" />
@@ -35,14 +71,22 @@ const { width, height } = await probeImageSize(image);
   <section
     class="border border-gray-100 dark:border-gray-600 rounded px-4 py-4 flex flex-col gap-y-4"
   >
-    <!-- It'd be nice if metascraper would give the alt for the image -->
-    <Image src={image} width={width} height={height} alt="" />
+    {
+      image !== "" && width !== undefined && height !== undefined && (
+        <Image src={image} width={width} height={height} alt="" />
+      )
+    }
+
     <div>
-      <h3 class="leading-tight font-semibold">{title}</h3>
-      <p class="leading-normal text-gray-600 dark:text-gray-300 text-sm">
-        {author}
-      </p>
+      {title !== "" && <h3 class="leading-tight font-semibold">{title}</h3>}
+      {
+        author !== "" && (
+          <p class="leading-normal text-gray-600 dark:text-gray-300 text-sm">
+            {author}
+          </p>
+        )
+      }
+      {description !== "" && <p class="leading-snug">{description}</p>}
     </div>
-    <p class="leading-snug">{description}</p>
   </section>
 </a>
