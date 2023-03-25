@@ -30,6 +30,7 @@
     "metascraper-description": "^5.33.7",
     "metascraper-image": "^5.33.7",
     "metascraper-title": "^5.33.7",
+    "open-graph-scraper": "^5.2.3",
     "probe-image-size": "^7.2.3",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",

@@ -1,5 +1,6 @@
 ---
 import { Image } from "@astrojs/image/components";
+import scrapeOpenGraphData from "open-graph-scraper";
 import probeImageSize from "probe-image-size";
 
 import metaParser, { Metadata } from "metascraper";
@@ -21,21 +22,19 @@ type Props = {
 };
 
 const { linkURL } = Astro.props;
+const url = linkURL.replace(").", "").replace(")", "");
 
+const scrapeResult = await scrapeOpenGraphData({ url });
+
+const { error, result, response } = scrapeResult;
+
+// console.log("result:", result); // This contains all of the Open Graph results
 let html = "";
-try {
-  const url = linkURL.replace(").", "").replace(")", "");
 
-  const res = await fetch(url);
-  if (res.ok) {
-    html = await res.text();
-  }
-  if (!res.ok) {
-    throw new Error(`Failed to fetch ${url}`);
-  }
-} catch (err) {
-  console.error(err);
-  return;
+// @ts-ignore
+if (typeof response !== "undefined" && typeof response.body !== "undefined") {
+  // @ts-ignore
+  html = response.body;
 }
 
 let title: string | undefined;

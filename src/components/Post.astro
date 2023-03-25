@@ -19,7 +19,7 @@ type Props = {
 const { title, slug, created_at, body, labels } = Astro.props;
 
 let linkPost = false;
-let linkURLs = new Set() as Set<string>;
+let linkURLs: string[] = [];
 
 if (labels !== undefined && labels.length > 0) {
   linkPost = labels.some((label) => {
@@ -57,8 +57,8 @@ if (linkPost && body !== undefined && body !== null) {
     markdownURLs.forEach((url) => {
       const href = url[2];
 
-      if (isImageURL(href) === false) {
-        linkURLs.add(href);
+      if (isImageURL(href) === false && linkURLs.includes(href) === false) {
+        linkURLs.push(href);
       }
     });
   }
@@ -67,8 +67,8 @@ if (linkPost && body !== undefined && body !== null) {
     bareURLs.forEach((url) => {
       const href = url[0].replace(").", "").replace(")", "");
 
-      if (isImageURL(href) === false) {
-        linkURLs.add(href);
+      if (isImageURL(href) === false && linkURLs.includes(href) === false) {
+        linkURLs.push(href);
       }
     });
   }
