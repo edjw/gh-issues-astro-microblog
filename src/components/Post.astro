@@ -19,7 +19,7 @@ type Props = {
 const { title, slug, created_at, body, labels } = Astro.props;
 
 let linkPost = false;
-let linkURLs: string[] = [];
+let linkURLs = new Set() as Set<string>;
 
 if (labels !== undefined && labels.length > 0) {
   linkPost = labels.some((label) => {
