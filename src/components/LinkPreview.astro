@@ -76,7 +76,7 @@ if (image !== "") {
       )
     }
 
-    <div>
+    <div class="flex flex-col">
       {title !== "" && <h3 class="leading-tight font-semibold">{title}</h3>}
       {
         author !== "" && (
@@ -85,7 +85,7 @@ if (image !== "") {
           </p>
         )
       }
-      {description !== "" && <p class="leading-snug">{description}</p>}
+      {description !== "" && <p class="leading-snug mt-4">{description}</p>}
     </div>
   </section>
 </a>
