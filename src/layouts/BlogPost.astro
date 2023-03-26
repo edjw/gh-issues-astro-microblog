@@ -36,7 +36,13 @@ if (typeof body !== "undefined" && body !== null) {
   <article class="flex flex-col gap-y-16 px-4 border-x border-t rounded-t-lg">
     <div class="px-4 py-4 max-w-full">
       {showTitles && <h2 class=" mt-0">{title}</h2>}
-      {body !== undefined && body !== null && <div set:html={parseMD(body)} />}
+      {
+        body !== undefined && body !== null && (
+          <>
+            <div set:html={parseMD(body)} />
+          </>
+        )
+      }
 
       {
         linkPost &&
