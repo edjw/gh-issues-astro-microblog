@@ -4,15 +4,19 @@
   );
 
   const now = new Date().getTime();
+  const relative = new Intl.RelativeTimeFormat("en-GB", {
+    style: "long",
+    numeric: "auto",
+  });
 
   allPostsPublishDateTimes.forEach((postPublishDateTime) => {
     const datetimeString = postPublishDateTime.dataset.datetime;
 
-    const relativeDate = getRelativeDate(datetimeString, now);
+    const relativeDate = getRelativeDate(datetimeString, now, relative);
     postPublishDateTime.textContent = relativeDate;
   });
 
-  function getRelativeDate(dateString, now) {
+  function getRelativeDate(dateString, now, relative) {
     const date = new Date(dateString);
     const diff = now - date.getTime();
     const diffInMinutes = diff / 1000 / 60;
@@ -25,23 +29,17 @@
     if (diffInMinutes < 1) {
       return "just now";
     } else if (diffInMinutes < 60) {
-      return `${Math.round(diffInMinutes)} minutes ago`;
+      return `${relative.format(Math.round(-diffInMinutes), "minute")}`;
     } else if (diffInHours < 24) {
-      return `${Math.round(diffInHours)} hours ago`;
+      return `${relative.format(Math.round(-diffInHours), "hour")}`;
     } else if (diffInDays < 7) {
-      return `${Math.round(diffInDays)} days ago`;
-    } else if (diffInWeeks < 2) {
-      return `${Math.round(diffInWeeks)} week ago`;
+      return `${relative.format(Math.round(-diffInDays), "day")}`;
     } else if (diffInWeeks < 4) {
-      return `${Math.round(diffInWeeks)} weeks ago`;
-    } else if (diffInMonths < 2) {
-      return `${Math.round(diffInMonths)} month ago`;
+      return `${relative.format(Math.round(-diffInWeeks), "week")}`;
     } else if (diffInMonths < 12) {
-      return `${Math.round(diffInMonths)} months ago`;
-    } else if (diffInYears < 2) {
-      return `${Math.round(diffInYears)} year ago`;
+      return `${relative.format(Math.round(-diffInMonths), "month")}`;
     } else {
-      return `${Math.round(diffInYears)} years ago`;
+      return `${relative.format(Math.round(-diffInYears), "year")}`;
     }
   }
 </script>
