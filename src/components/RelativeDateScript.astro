@@ -1,0 +1,47 @@
+<script is:inline>
+  const allPostsPublishDateTimes = Array.from(
+    document.querySelectorAll("time[data-datetime]")
+  );
+
+  const now = new Date().getTime();
+
+  allPostsPublishDateTimes.forEach((postPublishDateTime) => {
+    const datetimeString = postPublishDateTime.dataset.datetime;
+
+    const relativeDate = getRelativeDate(datetimeString, now);
+    postPublishDateTime.textContent = relativeDate;
+  });
+
+  function getRelativeDate(dateString, now) {
+    const date = new Date(dateString);
+    const diff = now - date.getTime();
+    const diffInMinutes = diff / 1000 / 60;
+    const diffInHours = diffInMinutes / 60;
+    const diffInDays = diffInHours / 24;
+    const diffInWeeks = diffInDays / 7;
+    const diffInMonths = diffInDays / 30;
+    const diffInYears = diffInDays / 365;
+
+    if (diffInMinutes < 1) {
+      return "just now";
+    } else if (diffInMinutes < 60) {
+      return `${Math.round(diffInMinutes)} minutes ago`;
+    } else if (diffInHours < 24) {
+      return `${Math.round(diffInHours)} hours ago`;
+    } else if (diffInDays < 7) {
+      return `${Math.round(diffInDays)} days ago`;
+    } else if (diffInWeeks < 2) {
+      return `${Math.round(diffInWeeks)} week ago`;
+    } else if (diffInWeeks < 4) {
+      return `${Math.round(diffInWeeks)} weeks ago`;
+    } else if (diffInMonths < 2) {
+      return `${Math.round(diffInMonths)} month ago`;
+    } else if (diffInMonths < 12) {
+      return `${Math.round(diffInMonths)} months ago`;
+    } else if (diffInYears < 2) {
+      return `${Math.round(diffInYears)} year ago`;
+    } else {
+      return `${Math.round(diffInYears)} years ago`;
+    }
+  }
+</script>

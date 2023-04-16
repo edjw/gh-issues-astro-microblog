@@ -8,6 +8,7 @@ if (!showTags) {
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import Post from "@/components/Post.astro";
 import ShowMoreScript from "@/components/showMoreScript.astro";
+import RelativeDateScript from "@/components/RelativeDateScript.astro";
 
 import { fetchAllIssueLabels } from "@/data/fetchAllIssueLabels";
 import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
@@ -75,3 +76,4 @@ const tagPosts = posts.filter((post: GithubIssueWithSlug) => {
   }
 </BaseLayout>
 <ShowMoreScript />
+<RelativeDateScript />

@@ -1,12 +1,11 @@
 ---
-import RelativeDate from "@/components/RelativeDate.astro";
 import { parseMD } from "@/utils/parseMD";
 import { showTags, showTitles } from "@/consts";
 import { formatDate } from "@/utils/formatDate";
-import extractLinks from "@/utils/extractLinksForPreview";
+// import extractLinks from "@/utils/extractLinksForPreview";
 
 import type { Label } from "../pages/tags/index.astro";
-import LinkPreview from "./LinkPreview.astro";
+// import LinkPreview from "./LinkPreview.astro";
 
 type Props = {
   title: string;
@@ -18,22 +17,22 @@ type Props = {
 
 const { title, slug, created_at, body, labels } = Astro.props;
 
-let linkPost = false;
-let linkURLs: string[] = [];
+// let linkPost = false;
+// let linkURLs: string[] = [];
 
-if (labels !== undefined && labels.length > 0) {
-  linkPost = labels.some((label) => {
-    if (typeof label !== "string") {
-      return label.name === "link";
-    } else {
-      return label === "link";
-    }
-  });
-}
+// if (labels !== undefined && labels.length > 0) {
+//   linkPost = labels.some((label) => {
+//     if (typeof label !== "string") {
+//       return label.name === "link";
+//     } else {
+//       return label === "link";
+//     }
+//   });
+// }
 
-if (typeof body !== "undefined" && body !== null) {
-  linkURLs = extractLinks(body, linkPost);
-}
+// if (typeof body !== "undefined" && body !== null) {
+//   linkURLs = extractLinks(body, linkPost);
+// }
 ---
 
 <li
@@ -76,13 +75,15 @@ if (typeof body !== "undefined" && body !== null) {
           </>
         )
       }
-      {
+
+      <!-- TODO: renable this and get error handling working -->
+      <!-- {
         linkPost &&
           linkURLs.length > 0 &&
           linkURLs.map((linkURL) => {
             return <LinkPreview linkURL={linkURL} />;
           })
-      }
+      } -->
     </div>
   </div>
 
@@ -104,7 +105,9 @@ if (typeof body !== "undefined" && body !== null) {
         href={`/post/${slug}/`}
         class="font-normal no-underline hover:underline"
       >
-        <RelativeDate date={created_at} />
+        <time datetime={created_at} data-datetime={created_at}>
+          {formatDate(created_at)}
+        </time>
       </a>
     </p>
 

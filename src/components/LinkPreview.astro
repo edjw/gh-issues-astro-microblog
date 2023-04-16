@@ -1,7 +1,9 @@
 ---
 import { Image } from "@astrojs/image/components";
 import scrapeOpenGraphData from "open-graph-scraper";
+
 import probeImageSize from "probe-image-size";
+import type { ProbeResult } from "probe-image-size";
 
 import metaParser from "metascraper";
 import type { Metadata } from "metascraper";
@@ -9,7 +11,6 @@ import metascraperDescription from "metascraper-description";
 import metascraperTitle from "metascraper-title";
 import metascraperImage from "metascraper-image";
 import metascraperAuthor from "metascraper-author";
-import type { ProbeResult } from "probe-image-size";
 
 const metascraper = metaParser([
   metascraperAuthor(),
@@ -27,12 +28,14 @@ const url = linkURL.replace(").", "").replace(")", "");
 
 const scrapeResult = await scrapeOpenGraphData({ url });
 
+console.log("scraperesult", scrapeResult);
+
 const { error, result, response } = scrapeResult;
 
 let html = "";
-
 // @ts-ignore
 if (typeof response !== "undefined" && typeof response.body !== "undefined") {
+  console.log(Object.keys(response));
   // @ts-ignore
   html = response.body;
 }

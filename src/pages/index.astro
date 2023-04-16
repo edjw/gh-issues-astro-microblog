@@ -6,7 +6,7 @@ import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Post from "@/components/Post.astro";
 import ShowMoreScript from "@/components/showMoreScript.astro";
-
+import RelativeDateScript from "@/components/RelativeDateScript.astro";
 let pageParam: string;
 pageParam = Astro.url.searchParams.get("page") || "1";
 
@@ -65,6 +65,7 @@ const numberOfNextPagePosts = nextPagePosts.length;
 </BaseLayout>
 
 <ShowMoreScript />
+<RelativeDateScript />
 
 <script define:vars={{ pageParam }}>
   const morePostsButton = document.querySelector("button.morePostsButton");
