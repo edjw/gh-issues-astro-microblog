@@ -10,7 +10,10 @@ export default defineConfig({
   site: "https://microblog.edjohnsonwilliams.co.uk",
   integrations: [tailwind(), image({
     serviceEntryPoint: '@astrojs/image/sharp'
-  })]
+  })],
+  experimental: {
+    viewTransitions: true
+  }
   // output: "static",
   // adapter: vercel({
   //   includeFiles: [

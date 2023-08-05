@@ -1,7 +1,8 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import "@fontsource/raleway/latin.css"
+import { ViewTransitions } from "astro:transitions";
+import "@fontsource/raleway/latin.css";
 import "../styles/global.css";
 
 import { SITE_TITLE } from "../consts";
@@ -15,7 +16,6 @@ type Props = {
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
 const { title, description, image = "/image/index.png" } = Astro.props;
-
 ---
 
 <!-- Global Metadata -->
@@ -52,21 +52,23 @@ const { title, description, image = "/image/index.png" } = Astro.props;
   title={`RSS feed for ${SITE_TITLE}`}
 />
 
-<script is:inline>
-  const theme = (() => {
-    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
-      return localStorage.getItem("theme");
-    }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  })();
+<ViewTransitions />
 
-  if (theme === "light") {
-    document.documentElement.classList.remove("dark");
-  } else {
-    document.documentElement.classList.add("dark");
+<script is:inline>
+const theme = (() => {
+  if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+    return localStorage.getItem("theme");
   }
-  window.localStorage.setItem("theme", theme);
+  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+    return "dark";
+  }
+  return "light";
+})();
+
+if (theme === "light") {
+  document.documentElement.classList.remove("dark");
+} else {
+  document.documentElement.classList.add("dark");
+}
+window.localStorage.setItem("theme", theme);
 </script>
