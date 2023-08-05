@@ -1,4 +1,6 @@
 <script is:inline>
+document.addEventListener("astro:load", () => {
+  // This only runs once.
   const allPostsPublishDateTimes = Array.from(
     document.querySelectorAll("time[data-datetime]")
   );
@@ -42,4 +44,8 @@
       return `${relative.format(Math.round(-diffInYears), "year")}`;
     }
   }
+  {
+    once: true;
+  }
+});
 </script>
