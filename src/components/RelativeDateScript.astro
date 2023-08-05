@@ -16,6 +16,7 @@ document.addEventListener("astro:load", () => {
 
     const relativeDate = getRelativeDate(datetimeString, now, relative);
     postPublishDateTime.textContent = relativeDate;
+    postPublishDateTime.classList.remove("hidden");
   });
 
   function getRelativeDate(dateString, now, relative) {

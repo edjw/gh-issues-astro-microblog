@@ -105,7 +105,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
         href={`/post/${slug}/`}
         class="font-normal no-underline hover:underline"
       >
-        <time datetime={created_at} data-datetime={created_at}>
+        <time class="hidden" datetime={created_at} data-datetime={created_at}>
           {formatDate(created_at)}
         </time>
       </a>
