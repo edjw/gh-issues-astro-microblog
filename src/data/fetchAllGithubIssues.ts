@@ -1,29 +1,24 @@
 import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
 import { fetchMultipleGithubIssues } from "@/data/fetchMultipleGithubIssues";
 
-async function fetchCurrentPageIssues(page: number) {
+async function fetchPageIssues(page: number): Promise<GithubIssueWithSlug[]> {
   const data = await fetchMultipleGithubIssues(page.toString());
   return data;
 }
 
-async function fetchNextPageLength(page: number): Promise<number> {
-  const nextPage = page + 1;
-  const data = await fetchMultipleGithubIssues(nextPage.toString());
-  return data.length;
-}
-
 export async function fetchAllGithubIssues() {
-  const page = 1;
+  let page = 1;
   let allIssues: GithubIssueWithSlug[] = [];
+  let hasNextPage = true;
 
-  while (true) {
-    const currentPageIssues = await fetchCurrentPageIssues(page);
-    allIssues = allIssues.concat(currentPageIssues);
+  while (hasNextPage) {
+    const currentPageIssues = await fetchPageIssues(page);
 
-    const nextPageIssuesLength = await fetchNextPageLength(page);
-
-    if (nextPageIssuesLength === 0) {
-      break;
+    if (currentPageIssues.length === 0) {
+      hasNextPage = false;
+    } else {
+      allIssues = allIssues.concat(currentPageIssues);
+      page++; // increment the page number for the next iteration
     }
   }
 

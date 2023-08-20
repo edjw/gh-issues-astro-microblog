@@ -7,71 +7,68 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
 import Post from "@/components/Post.astro";
 import ShowMoreScript from "@/components/showMoreScript.astro";
 import RelativeDateScript from "@/components/RelativeDateScript.astro";
-let pageParam: string;
-pageParam = Astro.url.searchParams.get("page") || "1";
 
-// if (pageParam && isNaN(Number(pageParam))) {
-//   return Astro.redirect("/");
-// }
+const pageParamNumber = Number(Astro.url.searchParams.get("page") || "1");
 
-// if (pageParam && Number(pageParam) < 2) {
-//   return Astro.redirect("/");
-// }
+let posts: GithubIssueWithSlug[] = [];
+let numberOfNextPagePosts = 0;
 
-const posts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(pageParam);
+try {
+    posts = await fetchMultipleGithubIssues(pageParamNumber.toString());
 
-const nextPagePosts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(
-  String(Number(pageParam) + 1)
-);
+    const nextPagePosts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(
+        (pageParamNumber + 1).toString()
+    );
 
-const numberOfNextPagePosts = nextPagePosts.length;
+    numberOfNextPagePosts = nextPagePosts.length;
+} catch (error) {
+    console.error("Error fetching GitHub issues:", error);
+}
+
 ---
-
 <BaseLayout
-  title={SITE_TITLE}
-  description={SITE_DESCRIPTION}
-  image={`/image/index.png`}
+    title={SITE_TITLE}
+    description={SITE_DESCRIPTION}
+    image={`/image/index.png`}
 >
-  {
-    posts.length > 0 ? (
-      <>
-        <ul class="flex flex-col pl-0 gap-y-8 max-w-prose">
-          {posts.map(({ title, slug, created_at, body, labels }) => {
-            if (typeof labels === "string") return false;
-            return (
-              <Post
-                title={title}
-                slug={slug}
-                created_at={created_at}
-                body={body}
-                labels={labels}
-              />
-            );
-          })}
-        </ul>
+    {posts.length > 0 ? (
+        <>
+            <ul class="flex flex-col pl-0 gap-y-8 max-w-prose">
+                {posts.map(({ title, slug, created_at, body, labels }) => {
+                    if (typeof labels === "string") return null;
+                    return (
+                        <Post
+                            title={title}
+                            slug={slug}
+                            created_at={created_at}
+                            body={body}
+                            labels={labels}
+                        />
+                    );
+                })}
+            </ul>
 
-        {numberOfNextPagePosts > 0 && (
-          <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
-            <button class="text-white morePostsButton">
-              More posts &#8594
-            </button>
-          </div>
-        )}
-      </>
+            {numberOfNextPagePosts > 0 && (
+                <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
+                    <button class="text-white morePostsButton">
+                        More posts &#8594;
+                    </button>
+                </div>
+            )}
+        </>
     ) : (
-      <p class="text-center text-gray-500">No posts yet</p>
-    )
-  }
+        <p class="text-center text-gray-500">No posts yet</p>
+    )}
 </BaseLayout>
 
 <ShowMoreScript />
 <RelativeDateScript />
 
-<script define:vars={{ pageParam }}>
-  const morePostsButton = document.querySelector("button.morePostsButton");
-  if (morePostsButton !== null) {
-    morePostsButton.addEventListener("click", () => {
-      window.location.href = `/?page=${Number(pageParam || 1) + 1}`;
-    });
-  }
+<script define:vars={{ pageParamNumber }}>
+const morePostsButton = document.querySelector("button.morePostsButton");
+if (morePostsButton !== null) {
+  morePostsButton.addEventListener("click", () => {
+    window.location.href = `/?page=${pageParamNumber + 1}`;
+  });
+}
 </script>

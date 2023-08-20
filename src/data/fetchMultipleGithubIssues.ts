@@ -29,9 +29,30 @@ export async function fetchMultipleGithubIssues(
     },
   });
 
+  if (res.headers.get("X-RateLimit-Remaining") === "0") {
+    const resetTime = new Date(
+      Number(res.headers.get("X-RateLimit-Reset")) * 1000
+    );
+    const currentTime = new Date();
+    const timeToWait = resetTime.getTime() - currentTime.getTime();
+
+    console.log(
+      `Rate limit hit.  Need to wait for ${Math.round(
+        timeToWait / 1000 / 60
+      )} minutes.`
+    );
+    throw new Error(
+      `GitHub API rate limit exceeded. Need to wait for ${Math.round(
+        timeToWait / 1000 / 60
+      )} minutes.`
+    );
+  }
+
   if (!res.ok) {
+    console.log(await res.text());
     throw new Error("Failed to fetch data");
   }
+
   const processedData = processIssues(
     (await res.json()) as GithubIssue[]
   ) as GithubIssueWithSlug[];

@@ -27,8 +27,8 @@ export function processIssues(data: GithubIssue[]): GithubIssueWithSlug[] {
       // Only keep issues that don't have any of the labels in labelsToExclude
       if (issue.labels) {
         return !issue.labels.some((label) => {
-          if (typeof label === "string" || typeof label.name === "undefined")
-            return false;
+          // if (typeof label === "string" || typeof label.name === "undefined")
+          //   return false;
           return labelsToExclude.includes(label.name);
         });
       }
