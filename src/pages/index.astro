@@ -14,51 +14,53 @@ let posts: GithubIssueWithSlug[] = [];
 let numberOfNextPagePosts = 0;
 
 try {
-    posts = await fetchMultipleGithubIssues(pageParamNumber.toString());
+  posts = await fetchMultipleGithubIssues(pageParamNumber.toString());
 
-    const nextPagePosts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(
-        (pageParamNumber + 1).toString()
-    );
+  const nextPagePosts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(
+    (pageParamNumber + 1).toString()
+  );
 
-    numberOfNextPagePosts = nextPagePosts.length;
+  numberOfNextPagePosts = nextPagePosts.length;
 } catch (error) {
-    console.error("Error fetching GitHub issues:", error);
+  console.error("Error fetching GitHub issues:", error);
 }
-
 ---
-<BaseLayout
-    title={SITE_TITLE}
-    description={SITE_DESCRIPTION}
-    image={`/image/index.png`}
->
-    {posts.length > 0 ? (
-        <>
-            <ul class="flex flex-col pl-0 gap-y-8 max-w-prose">
-                {posts.map(({ title, slug, created_at, body, labels }) => {
-                    if (typeof labels === "string") return null;
-                    return (
-                        <Post
-                            title={title}
-                            slug={slug}
-                            created_at={created_at}
-                            body={body}
-                            labels={labels}
-                        />
-                    );
-                })}
-            </ul>
 
-            {numberOfNextPagePosts > 0 && (
-                <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
-                    <button class="text-white morePostsButton">
-                        More posts &#8594;
-                    </button>
-                </div>
-            )}
-        </>
+<BaseLayout
+  title={SITE_TITLE}
+  description={SITE_DESCRIPTION}
+  image={`/image/index.png`}
+>
+  {
+    posts.length > 0 ? (
+      <>
+        <ul class="flex flex-col pl-0 gap-y-8 max-w-prose">
+          {posts.map(({ title, slug, created_at, body, labels }) => {
+            if (typeof labels === "string") return null;
+            return (
+              <Post
+                title={title}
+                slug={slug}
+                created_at={created_at}
+                body={body}
+                labels={labels}
+              />
+            );
+          })}
+        </ul>
+
+        {numberOfNextPagePosts > 0 && (
+          <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
+            <button class="text-white morePostsButton">
+              More posts &#8594;
+            </button>
+          </div>
+        )}
+      </>
     ) : (
-        <p class="text-center text-gray-500">No posts yet</p>
-    )}
+      <p class="text-center text-gray-500">No posts yet</p>
+    )
+  }
 </BaseLayout>
 
 <ShowMoreScript />
@@ -70,5 +72,5 @@ if (morePostsButton !== null) {
   morePostsButton.addEventListener("click", () => {
     window.location.href = `/?page=${pageParamNumber + 1}`;
   });
-}
+  }
 </script>
