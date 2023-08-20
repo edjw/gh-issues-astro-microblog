@@ -18,7 +18,7 @@ export async function fetchAllGithubIssues() {
       hasNextPage = false;
     } else {
       allIssues = allIssues.concat(currentPageIssues);
-      page++; // increment the page number for the next iteration
+      page++;
     }
   }
 
