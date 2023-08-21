@@ -8,8 +8,9 @@ export const SITE_DESCRIPTION = "It's a bit like a blog, but shorter";
 export const MAIN_WEBSITE_URL = "https://edjohnsonwilliams.co.uk";
 
 export const repoOwner = "edjw";
-// export const repoName = "old-github-issues-headless-cms";
 export const repoName = "microblog-cms";
+export const ASSETS_URL = `https://github.com/${repoOwner}/${repoName}/assets/`;
+
 export const postsState: postsStateType = "open";
 
 // showTitles should probably be false if you're making
