@@ -64,7 +64,7 @@ const fetchRedirectUrl = async (url: string): Promise<string | null> => {
       )
       .on("error", (err) => {
         console.error("Failed to fetch the redirect URL:", err.message);
-        resolve(null); // Use resolve with null instead of reject to mimic the previous behavior
+        resolve(null);
       });
   });
 };
