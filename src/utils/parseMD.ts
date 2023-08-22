@@ -136,7 +136,7 @@ const processUrls = async (urls: string[]): Promise<Map<string, string>> => {
     const transformedHref = await uploadToCloudinary(finalUrl, assetType);
 
     if (transformedHref) {
-      urlMap.set(url, transformedHref.url);
+      urlMap.set(url, transformedHref.secure_url);
     }
   }
   return urlMap;
