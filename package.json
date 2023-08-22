@@ -29,7 +29,6 @@
     "metascraper-description": "^5.34.10",
     "metascraper-image": "^5.34.10",
     "metascraper-title": "^5.34.10",
-    "node-fetch": "^3.3.2",
     "open-graph-scraper": "^5.2.3",
     "probe-image-size": "^7.2.3",
     "remark-gfm": "^3.0.1",
