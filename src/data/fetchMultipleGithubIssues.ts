@@ -23,6 +23,7 @@ export async function fetchMultipleGithubIssues(
   }
 
   const url = `https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=${postsState}&page=${page}&per_page=${perPage}`;
+  // const url = `https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=${postsState}&page=${page}&per_page=${perPage}`;
   const res = await fetch(url, {
     headers: {
       authorization: `token ${GITHUB_TOKEN}`,
@@ -56,5 +57,8 @@ export async function fetchMultipleGithubIssues(
   const processedData = processIssues(
     (await res.json()) as GithubIssue[]
   ) as GithubIssueWithSlug[];
+
+  // console.log(`Fetched ${processedData.length} issues for page ${page}`);
+
   return processedData;
 }

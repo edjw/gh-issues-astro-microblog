@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 
 import { fetchMultipleGithubIssues } from "@/data/fetchMultipleGithubIssues";
 import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
-import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
 import Post from "@/components/Post.astro";
 import ShowMoreScript from "@/components/showMoreScript.astro";
 import RelativeDateScript from "@/components/RelativeDateScript.astro";
@@ -12,10 +12,9 @@ const pageParamNumber = Number(Astro.url.searchParams.get("page") || "1");
 
 let posts: GithubIssueWithSlug[] = [];
 let numberOfNextPagePosts = 0;
-
 try {
   posts = await fetchMultipleGithubIssues(pageParamNumber.toString());
-
+  console.log("posts length", posts.length);
   const nextPagePosts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(
     (pageParamNumber + 1).toString()
   );
@@ -72,5 +71,5 @@ if (morePostsButton !== null) {
   morePostsButton.addEventListener("click", () => {
     window.location.href = `/?page=${pageParamNumber + 1}`;
   });
-  }
+}
 </script>

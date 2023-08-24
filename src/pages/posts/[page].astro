@@ -1,0 +1,96 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import { fetchMultipleGithubIssues } from "@/data/fetchMultipleGithubIssues";
+import { fetchAllGithubIssues } from "@/data/fetchAllGithubIssues";
+import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
+import { SITE_TITLE, SITE_DESCRIPTION } from "@/consts";
+import Post from "@/components/Post.astro";
+import ShowMoreScript from "@/components/showMoreScript.astro";
+import RelativeDateScript from "@/components/RelativeDateScript.astro";
+
+export async function getStaticPaths() {
+  const pageSize = 30;
+  const allIssues = await fetchAllGithubIssues();
+  const totalPages = Math.ceil(allIssues.length / pageSize);
+
+  const pages = [];
+
+for (let i = 1; i <= totalPages; i++) {
+
+    pages.push({
+      params: { page: i.toString() },
+    });
+}
+
+
+  return pages;
+}
+
+
+let posts = [];
+let numberOfNextPagePosts = 0;
+
+const currentPage = Astro.params.page;
+
+try {
+  const pageSize = 30;
+
+  posts = await fetchMultipleGithubIssues(currentPage, String(pageSize));
+   const nextPagePosts: GithubIssueWithSlug[] = await fetchMultipleGithubIssues(
+    (Number(currentPage) + 1).toString()
+  );
+
+  numberOfNextPagePosts = nextPagePosts.length;
+} catch (error) {
+  console.error("Error fetching GitHub issues:", error);
+}
+---
+
+<BaseLayout
+  title={SITE_TITLE}
+  description={SITE_DESCRIPTION}
+  image={`/image/index.png`}
+>
+  {
+    posts.length > 0 ? (
+      <>
+        <ul class="flex flex-col pl-0 gap-y-8 max-w-prose">
+          {posts.map(({ title, slug, created_at, body, labels }) => {
+            if (typeof labels === "string") return null;
+            return (
+              <Post
+                title={title}
+                slug={slug}
+                created_at={created_at}
+                body={body}
+                labels={labels}
+              />
+            );
+          })}
+        </ul>
+
+
+        {Number(currentPage) > 1 && (
+          <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
+            <a href={`/posts/${Number(currentPage) - 1}`} class="text-white no-underline">
+              &#8592; Previous posts
+          </div>
+        )}
+
+
+           {numberOfNextPagePosts > 0 && (
+          <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
+            <a href={`/posts/${Number(currentPage) + 1}`} class="text-white no-underline">
+              More posts &#8594;
+            </a>
+          </div>
+        )}
+      </>
+    ) : (
+      <p class="text-center text-gray-500">No posts yet</p>
+    )
+  }
+</BaseLayout>
+
+<ShowMoreScript />
+<RelativeDateScript />

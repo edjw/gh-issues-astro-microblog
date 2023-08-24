@@ -1,12 +1,16 @@
 ---
-import HeaderLink from "./HeaderLink.astro";
-import ThemeSwitcher from "../components/ThemeSwitcher.astro";
-import { SITE_TITLE, MAIN_WEBSITE_URL } from "../consts";
----
+import HeaderLink from "@/components/HeaderLink.astro";
+import ThemeSwitcher from "@/components/ThemeSwitcher.astro";
+import { SITE_TITLE, MAIN_WEBSITE_URL, repoName, repoOwner } from "@/consts";
 
+const headerURL =
+  import.meta.env.MODE === "development"
+    ? `https://github.com/${repoOwner}/${repoName}/issues`
+    : "/";
+---
 <header class="flex gap-x-6 sm:gap-x-8 items-center justify-between">
   <h1 class="underline hover:no-underline text-normal text-lg">
-    <a href="/">{SITE_TITLE}</a>
+    <a href={headerURL}>{SITE_TITLE}</a>
   </h1>
   <nav class="leading-tight">
     <HeaderLink

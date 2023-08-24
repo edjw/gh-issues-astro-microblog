@@ -3,7 +3,7 @@ import sanitizeHtml from "sanitize-html";
 import { v2 as cloudinary } from "cloudinary";
 import pkg from "follow-redirects";
 const { https } = pkg;
-import { ASSETS_URL } from "../consts";
+import { ASSETS_URL } from "@/consts";
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 const CLOUDINARY_CLOUD_NAME = import.meta.env.CLOUDINARY_CLOUD_NAME;

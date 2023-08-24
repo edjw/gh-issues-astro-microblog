@@ -6,7 +6,13 @@ async function fetchPageIssues(page: number): Promise<GithubIssueWithSlug[]> {
   return data;
 }
 
+let cachedIssues: GithubIssueWithSlug[] | null = null;
+
 export async function fetchAllGithubIssues() {
+  if (cachedIssues) {
+    return cachedIssues;
+  }
+
   let page = 1;
   let allIssues: GithubIssueWithSlug[] = [];
   let hasNextPage = true;
@@ -21,6 +27,10 @@ export async function fetchAllGithubIssues() {
       page++;
     }
   }
+
+  cachedIssues = allIssues;
+
+  console.log("Total number of issues fetched:", allIssues.length);
 
   return allIssues;
 }

@@ -8,7 +8,7 @@ type GithubIssue =
 
 export type GithubIssueWithSlug = GithubIssue & { slug: string };
 
-import { repoOwner, repoName, postsState, showTitles } from "../consts";
+import { repoOwner, repoName, postsState, showTitles } from "@/consts";
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 

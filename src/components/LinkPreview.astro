@@ -28,14 +28,14 @@ const url = linkURL.replace(").", "").replace(")", "");
 
 const scrapeResult = await scrapeOpenGraphData({ url });
 
-console.log("scraperesult", scrapeResult);
+// console.log("scraperesult", scrapeResult);
 
 const { error, result, response } = scrapeResult;
 
 let html = "";
 // @ts-ignore
 if (typeof response !== "undefined" && typeof response.body !== "undefined") {
-  console.log(Object.keys(response));
+  // console.log(Object.keys(response));
   // @ts-ignore
   html = response.body;
 }
