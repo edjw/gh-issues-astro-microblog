@@ -24,5 +24,51 @@
   ],
   "regions": [
     "lhr1"
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/posts/1"
+    },
+    {
+      "source": "/24-little-lego-castle",
+      "destination": "/post/24-little-lego-castle"
+    },
+    {
+      "source": "/23-the-needles-on-the-isle-of-wight",
+      "destination": "/post/23-the-needles-on-the-isle-of-wight"
+    },
+    {
+      "source": "/22-next-book-foghorns",
+      "destination": "/post/22-next-book-foghorns"
+    },
+    {
+      "source": "/21-posting-lastfm-summaries-and-this-cms",
+      "destination": "/post/21-posting-lastfm-summaries-and-this-cms"
+    },
+    {
+      "source": "/20-my-lastfm-weekly-tracks-chart",
+      "destination": "/post/20-my-lastfm-weekly-tracks-chart"
+    },
+    {
+      "source": "/12-holy-fucks-music",
+      "destination": "/post/12-holy-fucks-music"
+    },
+    {
+      "source": "/5-so-quick",
+      "destination": "/post/5-so-quick"
+    },
+    {
+      "source": "/3-websites-are-nicer-to-publish-than-native-apps",
+      "destination": "/post/3-websites-are-nicer-to-publish-than-native-apps"
+    },
+    {
+      "source": "/2-lighthouse",
+      "destination": "/post/2-lighthouse"
+    },
+    {
+      "source": "/1-first-post",
+      "destination": "/post/1-first-post"
+    }
   ]
 }
