@@ -31,6 +31,10 @@
       "destination": "/posts/1"
     },
     {
+      "source": "/:path(\\d{1,})",
+      "destination": "/posts/:path*"
+    },
+    {
       "source": "/24-little-lego-castle",
       "destination": "/post/24-little-lego-castle"
     },

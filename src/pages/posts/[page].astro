@@ -68,26 +68,19 @@ try {
 
         {Number(currentPage) > 1 && (
           <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
-            {Number(currentPage) > 2 && (
-              <a
-                href={`/posts/${Number(currentPage) - 1}`}
-                class="text-white no-underline"
-              >
-                &#8592; Previous posts
-              </a>
-            )}
-            {Number(currentPage) === 2 && (
-              <a href={`/`} class="text-white no-underline">
-                &#8592; Previous posts
-              </a>
-            )}
+            <a
+              href={`/${Number(currentPage) - 1}`}
+              class="text-white no-underline"
+            >
+              &#8592; Previous posts
+            </a>
           </div>
         )}
 
         {numberOfNextPagePosts > 0 && (
           <div class="px-2 py-1 mx-auto bg-gray-600 rounded hover:shadow-lg max-w-fit">
             <a
-              href={`/posts/${Number(currentPage) + 1}`}
+              href={`/${Number(currentPage) + 1}`}
               class="text-white no-underline"
             >
               More posts &#8594;
