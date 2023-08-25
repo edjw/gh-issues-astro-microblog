@@ -75,5 +75,15 @@
       "source": "/1-first-post",
       "destination": "/post/1-first-post"
     }
+  ],
+  "redirects": [
+    {
+      "source": "/posts/1",
+      "destination": "/"
+    },
+    {
+      "source": "/posts/:path*",
+      "destination": "/:path(\\d{1,})"
+    }
   ]
 }
