@@ -1,4 +1,5 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "headers": [
     {
       "source": "/(.*)",
@@ -25,7 +26,7 @@
   "regions": [
     "lhr1"
   ],
-  "redirects": [
+  "rewrites": [
     {
       "source": "/",
       "destination": "/posts/1"
