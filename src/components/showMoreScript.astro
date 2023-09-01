@@ -1,39 +1,37 @@
 <script is:inline>
-  function main() {
-    const allPosts = Array.from(document.querySelectorAll("li.postWrapper"));
+function handlePostExpansion() {
+  const allPosts = Array.from(document.querySelectorAll("li.postWrapper"));
 
-    allPosts.forEach((post) => {
-      const contentWrapper = post.querySelector("div.contentWrapper");
-      if (!contentWrapper) return;
+  allPosts.forEach((post) => {
+    const contentWrapper = post.querySelector("div.contentWrapper");
+    if (!contentWrapper) return;
 
-      const postContent = post.querySelector("div.postContent");
-      if (!postContent) return;
+    const postContent = post.querySelector("div.postContent");
+    if (!postContent) return;
 
-      const showMoreButtonWrapper = post.querySelector(
-        "div.showMoreButtonWrapper"
-      );
-      if (!showMoreButtonWrapper) return;
+    const showMoreButtonWrapper = post.querySelector(
+      "div.showMoreButtonWrapper"
+    );
+    if (!showMoreButtonWrapper) return;
 
-      const showMoreButton = showMoreButtonWrapper.querySelector("button");
-      if (!showMoreButton) return;
+    const showMoreButton = showMoreButtonWrapper.querySelector("button");
+    if (!showMoreButton) return;
 
-      const contentWrapperHeight = contentWrapper.offsetHeight;
-      const postContentHeight = postContent.scrollHeight;
+    const contentWrapperHeight = contentWrapper.offsetHeight;
+    const postContentHeight = postContent.scrollHeight;
 
-      if (postContentHeight <= contentWrapperHeight) return;
+    if (postContentHeight <= contentWrapperHeight) return;
 
-      showMoreButtonWrapper.classList.remove("hidden");
+    showMoreButtonWrapper.classList.remove("hidden");
 
-      showMoreButton.addEventListener("click", () => {
-        contentWrapper.classList.remove("max-h-[512px]");
-        showMoreButtonWrapper.classList.add("hidden");
-      });
+    showMoreButton.addEventListener("click", () => {
+      contentWrapper.classList.toggle("max-h-[512px]");
+      showMoreButtonWrapper.classList.toggle("hidden");
     });
-  }
+  });
+}
 
-  document.onreadystatechange = () => {
-    if (document.readyState === "complete") {
-      main();
-    }
-  };
+document.addEventListener("astro:page-load", () => {
+  handlePostExpansion();
+});
 </script>
