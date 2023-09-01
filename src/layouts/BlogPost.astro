@@ -33,7 +33,7 @@ if (typeof body !== "undefined" && body !== null) {
 ---
 
 <BaseLayout title={title} description={title} image={`/image/${slug}.png`}>
-  <article class="flex flex-col gap-y-16 px-4 border-x border-t rounded-t-lg">
+  <article class="flex flex-col gap-y-16 px-4 border-x border-t rounded-t-lg" transition:name="post">
     <div class="px-4 py-4 max-w-full">
       {
         showTitles && (
@@ -45,7 +45,7 @@ if (typeof body !== "undefined" && body !== null) {
       {
         body !== undefined && body !== null && (
           <>
-            <div set:html={parseMD(body)} transition:name="postContent" />
+            <div set:html={parseMD(body)} />
           </>
         )
       }
