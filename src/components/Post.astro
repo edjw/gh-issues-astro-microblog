@@ -58,7 +58,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
   <div class="px-8 pt-4 max-h-[512px] contentWrapper">
     {
       showTitles && (
-        <h2 class="mt-0 text-lg font-semibold">
+        <h2 class="mt-0 text-lg font-semibold" transition:name="postTitle">
           <a href={`/post/${slug}/`}>{title}</a>
         </h2>
       )
@@ -70,6 +70,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
           <>
             <div
               class="max-h-full prose dark:prose-invert"
+              transition:name="postContent"
               set:html={parseMD(body)}
             />
           </>

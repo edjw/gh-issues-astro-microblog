@@ -69,7 +69,7 @@ export async function getStaticPaths() {
   return [...allPaths];
 }
 
-export async function get({ params, props }: APIContext) {
+export async function GET({ params, props }: APIContext) {
   const { slug } = params;
   const post = props;
 
