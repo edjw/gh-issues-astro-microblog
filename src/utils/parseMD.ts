@@ -82,7 +82,7 @@ const uploadToCloudinary = async (url: string, type: "image" | "video") => {
       unique_filename: false,
       overwrite: false,
       resource_type: type,
-      format: "auto",
+      format: type === "image" ? "webp" : "auto",
       eager: [
         {
           quality: "auto",
