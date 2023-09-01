@@ -71,14 +71,14 @@ if (typeof body !== "undefined" && body !== null) {
                 {typeof label !== "string" ? (
                   <a
                     href={`/tags/${label.name}`}
-                    class="before:content-['# '] before:-mr-1 font-normal text-sm no-underline hover:underline"
+                    class="before:content-['#'] font-normal text-sm no-underline hover:underline"
                   >
                     {label.name}
                   </a>
                 ) : (
                   <a
                     href={`/tags/${label}`}
-                    class="before:content-['# '] before:-mr-1 font-normal text-sm no-underline hover:underline"
+                    class="before:content-['#'] font-normal text-sm no-underline hover:underline"
                   >
                     #{label}
                   </a>
