@@ -87,7 +87,7 @@ const uploadToCloudinary = async (url: string, type: "image" | "video") => {
         {
           quality: "auto",
           width: 500,
-          crop: "scale", // This will resize the image to the specified width while maintaining the original aspect ratio, but it will not upscale the image if the original width is smaller than the specified width.
+          crop: "limit"
         },
       ],
     });
