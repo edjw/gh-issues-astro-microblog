@@ -1,6 +1,6 @@
 import { marked } from "marked";
 import sanitizeHtml from "sanitize-html";
-import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
 import pkg from "follow-redirects";
 const { https } = pkg;
 import { ASSETS_URL } from "@/consts";
@@ -76,15 +76,21 @@ cloudinary.config({
 
 // Uploads images and videos to cloudinary during the build
 const uploadToCloudinary = async (url: string, type: "image" | "video") => {
-  const options = {
-    use_filename: true,
-    unique_filename: false,
-    overwrite: false,
-    resource_type: type,
-  };
-
   try {
-    const result = await cloudinary.uploader.upload(url, options);
+    const result = await cloudinary.uploader.upload(url, {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: false,
+      resource_type: type,
+      format: "auto",
+      eager: [
+        {
+          quality: "auto",
+          width: 500,
+          crop: "scale", // This will resize the image to the specified width while maintaining the original aspect ratio, but it will not upscale the image if the original width is smaller than the specified width.
+        },
+      ],
+    });
     return result;
   } catch (error) {
     console.error("Error uploading to Cloudinary:", { error, url, type });
@@ -121,8 +127,10 @@ const extractUrlsFromMarkdown = (content: string): string[] => {
 };
 
 // Loops through all urls, works out if they're an image or a video. Uploads images and videos to Cloudinary.
-const processUrls = async (urls: string[]): Promise<Map<string, string>> => {
-  const urlMap: Map<string, string> = new Map();
+const processUrls = async (
+  urls: string[]
+): Promise<Map<string, UploadApiResponse>> => {
+  const urlMap: Map<string, UploadApiResponse> = new Map();
 
   for (const url of urls) {
     const finalUrl = await fetchRedirectUrl(url);
@@ -136,9 +144,10 @@ const processUrls = async (urls: string[]): Promise<Map<string, string>> => {
     const transformedHref = await uploadToCloudinary(finalUrl, assetType);
 
     if (transformedHref) {
-      urlMap.set(url, transformedHref.secure_url);
+      urlMap.set(url, transformedHref);
     }
   }
+
   return urlMap;
 };
 
@@ -170,6 +179,7 @@ const sanitizeHTMLOptions: sanitizeHtml.IOptions = {
 
 export const parseMD = async (content: string): Promise<string> => {
   const urls = extractUrlsFromMarkdown(content);
+
   const processedUrlMap = await processUrls(urls);
 
   renderer.link = (href, title, text) => {
@@ -178,29 +188,28 @@ export const parseMD = async (content: string): Promise<string> => {
       href.match(/\.(jpeg|jpg|gif|png)$/i) ||
       isAssetURL(href)
     ) {
-      const processedUrl = processedUrlMap.get(href) || href;
-      if (isURLVideo(processedUrl)) {
+      const transformedHref = processedUrlMap.get(href);
+
+      if (transformedHref && isURLVideo(href)) {
         return `<div class="flex justify-center"><video controls muted preload="metadata" class="max-h-72 my-0 border dark:border-gray-500">
-              <source src="${processedUrl}" type="video/mp4">
+              <source src="${transformedHref.eager[0].secure_url}" type="video/mp4">
             </video></div>`;
       }
-      return `<a href="${processedUrl}">${text}</a>`;
+      return `<a href="${href}">${text}</a>`;
     }
     return `<a href="${href}">${text}</a>`;
   };
 
   renderer.image = (href, title, text) => {
-    if (
-      isURLVideo(href) ||
-      href.match(/\.(jpeg|jpg|gif|png)$/i) ||
-      isAssetURL(href)
-    ) {
-      const processedUrl = processedUrlMap.get(href) || href;
-      return `<img src="${processedUrl}" alt="${text}" title="${
-        title || ""
-      }" />`;
+    const transformedHref = processedUrlMap.get(href);
+    if (transformedHref) {
+      return `<img src="${
+        transformedHref.eager[0].secure_url
+      }" alt="${text}" title="${title || ""}" width=${
+        transformedHref.eager[0].width
+      } height=${transformedHref.eager[0].height} />`;
     }
-    return `<img src="${href}" alt="${text}" title="${title || ""}" />`;
+    return `<img src="${href}" alt="${text}" />`;
   };
 
   marked.use({ renderer });
