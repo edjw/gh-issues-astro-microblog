@@ -5,30 +5,7 @@ import { fetchAllGithubIssues } from "@/data/fetchAllGithubIssues";
 import { parseMD } from "@/utils/parseMD";
 const posts = await fetchAllGithubIssues();
 
-const processedPosts = posts.map(async (post) => {
-  return {
-    title: post.title,
-    pubDate: new Date(post.created_at),
-    content: (await Promise.all(await parseMD(post.body || ""))) || "",
-    link: `/post/${post.slug}/`,
-  };
-});
-
-// export async function get(context: APIContext) {
-//   return rss({
-//     title: SITE_TITLE,
-//     description: SITE_DESCRIPTION,
-//     site: String(context.site),
-//     items: posts.map(async (post) => ({
-//       title: post.title,
-//       pubDate: new Date(post.created_at),
-//       content: (await Promise.all(await parseMD(post.body || ""))) || "",
-//       link: `/post/${post.slug}/`,
-//     })),
-//   });
-// }
-
-export async function get(context: APIContext) {
+export async function GET(context: APIContext) {
   const feedItems = await Promise.all(
     posts.map(async (post) => {
       const parsedContent = await parseMD(post.body || "");

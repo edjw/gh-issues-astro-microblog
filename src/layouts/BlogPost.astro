@@ -35,7 +35,13 @@ if (typeof body !== "undefined" && body !== null) {
 <BaseLayout title={title} description={title} image={`/image/${slug}.png`}>
   <article class="flex flex-col gap-y-16 px-4 border-x border-t rounded-t-lg">
     <div class="px-4 py-4 max-w-full">
-      {showTitles && <h2 class=" mt-0">{title}</h2>}
+      {
+        showTitles && (
+          <h2 class=" mt-0" transition:name="postTitle">
+            {title}
+          </h2>
+        )
+      }
       {
         body !== undefined && body !== null && (
           <>
@@ -65,14 +71,14 @@ if (typeof body !== "undefined" && body !== null) {
                 {typeof label !== "string" ? (
                   <a
                     href={`/tags/${label.name}`}
-                    class="before:content-['#'] before:-mr-1 font-normal text-sm no-underline hover:underline"
+                    class="before:content-['#'] font-normal text-sm no-underline hover:underline"
                   >
                     {label.name}
                   </a>
                 ) : (
                   <a
                     href={`/tags/${label}`}
-                    class="before:content-['#'] before:-mr-1 font-normal text-sm no-underline hover:underline"
+                    class="before:content-['#'] font-normal text-sm no-underline hover:underline"
                   >
                     #{label}
                   </a>

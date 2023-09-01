@@ -58,7 +58,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
   <div class="px-8 pt-4 max-h-[512px] contentWrapper">
     {
       showTitles && (
-        <h2 class="mt-0 text-lg font-semibold">
+        <h2 class="mt-0 text-lg font-semibold" transition:name="postTitle">
           <a href={`/post/${slug}/`}>{title}</a>
         </h2>
       )
@@ -118,7 +118,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
             <li class="pl-0 my-0">
               <a
                 href={`/tags/${name}/`}
-                class="hover:underline no-underline before:content-['#'] before:-mr-1 text-sm font-normal"
+                class="hover:underline no-underline before:content-['#'] text-sm font-normal"
               >
                 {name}
               </a>

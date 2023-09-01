@@ -30,7 +30,7 @@ export async function fetchAllGithubIssues() {
 
   cachedIssues = allIssues;
 
-  console.log("Total number of issues fetched:", allIssues.length);
+  // console.log("Total number of issues fetched:", allIssues.length);
 
   return allIssues;
 }
