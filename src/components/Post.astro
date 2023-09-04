@@ -37,6 +37,7 @@ const { title, slug, created_at, body, labels } = Astro.props;
 
 <li
   class="relative flex flex-col p-0 my-0 overflow-hidden border rounded-lg hover:shadow-xl gap-y-8 postWrapper"
+  transition:name={title}
 >
   <a href={`/post/${slug}/`} class="absolute mt-0 text-right right-2 top-2">
     <span class="sr-only">Link to post</span>
