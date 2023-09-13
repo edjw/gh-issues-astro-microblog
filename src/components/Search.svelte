@@ -29,11 +29,11 @@
   id="search-dialog"
 >
   <!-- dialog wrapper -->
-  <div class="relative w-[32rem] md:mx-auto md:mb-auto md:mt-14">
+  <div class="relative md:w-[28rem] md:mx-auto md:mb-auto md:mt-14">
     <!-- dialog contents -->
     <div class="flex flex-col px-4 py-8 gap-y-8">
       <!-- search bar -->
-      <div class="flex gap-x-4 justify-between items-center relative w-full">
+      <div class="flex gap-x-4 justify-between items-center relative px-4Ì">
         <input
           class="h-10 w-full border rounded px-2 dark:text-black focus-within:outline-none"
           type="search"
