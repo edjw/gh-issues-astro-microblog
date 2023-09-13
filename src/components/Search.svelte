@@ -41,6 +41,7 @@
           placeholder="Search"
           bind:value={query}
           on:input={handleSearch}
+          autofocus={true}
         />
 
         <button type="reset" aria-label="Cancel" class="" id="search-cancel"
