@@ -5,6 +5,7 @@ import type {
 import { processIssues } from "@/data/processIssues";
 import { postsState, repoName, repoOwner } from "@/consts";
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
+import { AssetCache } from "@11ty/eleventy-fetch";
 
 export async function fetchMultipleGithubIssues(
   page?: string,
@@ -23,12 +24,21 @@ export async function fetchMultipleGithubIssues(
   }
 
   const url = `https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=${postsState}&page=${page}&per_page=${perPage}`;
-  // const url = `https://api.github.com/repos/${repoOwner}/${repoName}/issues?state=${postsState}&page=${page}&per_page=${perPage}`;
-  const res = await fetch(url, {
-    headers: {
-      authorization: `token ${GITHUB_TOKEN}`,
-    },
-  });
+
+  let res;
+
+  const asset = new AssetCache(`github-issues-${page}-${perPage}`);
+
+  if (asset.isCacheValid("2h")) {
+    console.log("Using cached value");
+    res = asset.getCachedValue();
+  } else {
+    res = await fetch(url, {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+      },
+    });
+  }
 
   if (res.headers.get("X-RateLimit-Remaining") === "0") {
     const resetTime = new Date(

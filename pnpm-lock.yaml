@@ -5,6 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
+  '@11ty/eleventy-fetch':
+    specifier: ^4.0.0
+    version: 4.0.0
   '@astrojs/rss':
     specifier: ^3.0.0
     version: 3.0.0
@@ -120,6 +123,19 @@ devDependencies:
     version: 0.8.0
 
 packages:
+
+  /@11ty/eleventy-fetch@4.0.0:
+    resolution: {integrity: sha512-wGAd0r+8DUWr22fK5r07dOKuNY6ltA7hX+sJzngGZL1yJmuUVdM/xPQZ+iq0BFgf/ZeRdpVEzf2D0cpVZUuiTg==}
+    engines: {node: '>=14'}
+    dependencies:
+      debug: 4.3.4
+      flat-cache: 3.1.0
+      node-fetch: 2.6.9
+      p-queue: 6.6.2
+    transitivePeerDependencies:
+      - encoding
+      - supports-color
+    dev: false
 
   /@alloc/quick-lru@5.2.0:
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
@@ -2478,6 +2494,10 @@ packages:
       '@types/estree': 1.0.1
     dev: false
 
+  /eventemitter3@4.0.7:
+    resolution: {integrity: sha512-8guHBZCwKnFhYdHr2ysuRWErTwhoN2X8XELRlrRwpmfeY2jjuUN4taQMsULKUVo1K4DvZl+0pgfyoysHxvmvEw==}
+    dev: false
+
   /execa@8.0.1:
     resolution: {integrity: sha512-VyhnebXciFV2DESc+p6B+y0LjSm0krU4OgJN44qFAhBY0TJ+1V61tYD2+wHusZ6F9n5K+vl8k0sTy7PEfV4qpg==}
     engines: {node: '>=16.17'}
@@ -2584,6 +2604,19 @@ packages:
     dependencies:
       micromatch: 4.0.5
       pkg-dir: 4.2.0
+    dev: false
+
+  /flat-cache@3.1.0:
+    resolution: {integrity: sha512-OHx4Qwrrt0E4jEIcI5/Xb+f+QmJYNj2rrK8wiIdQOIrB9WrrJL8cjZvXdXuBTkkEwEqLycb5BeZDV1o2i9bTew==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      flatted: 3.2.7
+      keyv: 4.5.3
+      rimraf: 3.0.2
+    dev: false
+
+  /flatted@3.2.7:
+    resolution: {integrity: sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==}
     dev: false
 
   /follow-redirects@1.15.2:
@@ -3272,6 +3305,12 @@ packages:
 
   /keyv@4.5.2:
     resolution: {integrity: sha512-5MHbFaKn8cNSmVW7BYnijeAVlE4cYA/SVkifVgrh7yotnfhKmjuXpDKjrABLnT0SfHWV21P8ow07OGfRrNDg8g==}
+    dependencies:
+      json-buffer: 3.0.1
+    dev: false
+
+  /keyv@4.5.3:
+    resolution: {integrity: sha512-QCiSav9WaX1PgETJ+SpNnx2PRRapJ/oRSXM4VO5OGYGSjrxbKPVFVhB3l2OCbLCk329N8qyAtsJjSjvVBWzEug==}
     dependencies:
       json-buffer: 3.0.1
     dev: false
@@ -4316,6 +4355,11 @@ packages:
     engines: {node: '>=12.20'}
     dev: false
 
+  /p-finally@1.0.0:
+    resolution: {integrity: sha512-LICb2p9CB7FS+0eR1oqWnHhp0FljGLZCWBE9aix0Uye9W8LTQPwMTYVGWQWIw9RdQiDg4+epXQODwIYJtSJaow==}
+    engines: {node: '>=4'}
+    dev: false
+
   /p-limit@2.3.0:
     resolution: {integrity: sha512-//88mFWSJx8lxCzwdAABTJL2MyWB12+eIY7MDL2SqLmAkeKU9qxRvWuSyTjm3FUmpBEMuFfckAIqEaVGUDxb6w==}
     engines: {node: '>=6'}
@@ -4356,6 +4400,21 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       aggregate-error: 3.1.0
+    dev: false
+
+  /p-queue@6.6.2:
+    resolution: {integrity: sha512-RwFpb72c/BhQLEXIZ5K2e+AhgNVmIejGlTgiB9MzZ0e93GRvqZ7uSi0dvRF7/XIXDeNkra2fNHBxTyPDGySpjQ==}
+    engines: {node: '>=8'}
+    dependencies:
+      eventemitter3: 4.0.7
+      p-timeout: 3.2.0
+    dev: false
+
+  /p-timeout@3.2.0:
+    resolution: {integrity: sha512-rhIwUycgwwKcP9yTOOFK/AKsAopjjCakVqLHePO3CC6Mir1Z99xT+R63jZxAT5lFZLa2inS5h+ZS2GvR99/FBg==}
+    engines: {node: '>=8'}
+    dependencies:
+      p-finally: 1.0.0
     dev: false
 
   /p-try@2.2.0:

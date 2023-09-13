@@ -4,6 +4,7 @@ import type {
 } from "@/types/githubIssueTypes";
 import { processIssues } from "./processIssues";
 import { repoName, repoOwner } from "@/consts";
+import { AssetCache } from "@11ty/eleventy-fetch";
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
 
@@ -17,11 +18,20 @@ export async function fetchSingleGithubIssue(
   }
 
   const url = `https://api.github.com/repos/${repoOwner}/${repoName}/issues/${issueNumber}`;
-  const res = await fetch(url, {
-    headers: {
-      Authorization: `token ${GITHUB_TOKEN}`,
-    },
-  });
+
+  let res;
+  const asset = new AssetCache(`github-issue-${issueNumber}`);
+
+  if (asset.isCacheValid("2h")) {
+    console.log("Using cached value");
+    res = asset.getCachedValue();
+  } else {
+    res = await fetch(url, {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+      },
+    });
+  }
 
   if (res.headers.get("X-RateLimit-Remaining") === "0") {
     const resetTime = new Date(
