@@ -40,6 +40,7 @@
           name="search"
           placeholder="Search"
           bind:value={query}
+          on:input={handleSearch}
           id="search-input"
         />
 
