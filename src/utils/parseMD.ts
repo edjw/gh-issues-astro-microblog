@@ -57,7 +57,9 @@ const fetchRedirectUrl = async (url: string): Promise<string | null> => {
             resolve(null);
           }
 
-          response.on("data", () => {});
+          response.on("data", () => {
+
+          });
         }
       )
       .on("error", (err) => {
@@ -132,6 +134,9 @@ const processUrls = async (
 ): Promise<Map<string, UploadApiResponse>> => {
   const urlMap: Map<string, UploadApiResponse> = new Map();
 
+
+  // TODO: this is VERY VERY slow. change to Promise.all or parallel
+  // or keep a cache of already uploaded images and videos and only find the redirect url and upload if it's a new one (based on the url)
   for (const url of urls) {
     const finalUrl = await fetchRedirectUrl(url);
     const assetType = isURLVideo(finalUrl) ? "video" : "image";
