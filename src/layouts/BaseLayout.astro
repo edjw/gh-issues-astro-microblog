@@ -2,6 +2,10 @@
 import BaseHead from "@/components/BaseHead.astro";
 import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
+import Search from "@/components/Search.svelte";
+import { fetchAllGithubIssues } from "@/data/fetchAllGithubIssues";
+import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
+import { marked } from "marked";
 
 type Props = {
   title: string;
@@ -35,20 +39,42 @@ if (pathname.startsWith("/tags/")) {
   const tag = pathname.split("/")[2];
   socialImage = `/image/tagged-as-${tag}.png`;
 }
+
+const allPosts: GithubIssueWithSlug[] = await fetchAllGithubIssues();
+
+async function getSearchIndexForAllPosts() {
+  const allPostsSearchIndex = [];
+
+  for (const post of allPosts) {
+    allPostsSearchIndex.push({
+      title: post.title,
+      slug: post.slug,
+      body: marked.parse(post.body),
+      created_at: post.created_at,
+      updated_at: post.updated_at,
+      tags: post.labels.map((label) => label.name).join(" "),
+    });
+  }
+
+  return allPostsSearchIndex;
+}
+
+const allPostsSearchIndex = await getSearchIndexForAllPosts();
 ---
 
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} image={socialImage} />
   </head>
   <body
-    class="container grid grid-rows-[auto_1fr_auto] grid-cols-1 min-h-[100dvh] max-w-xl mx-auto pt-4 pb-8 px-4 gap-y-12 dark:bg-gray-800 dark:text-white"
+    class="container grid grid-rows-[auto_1fr_auto] grid-cols-12 min-h-[100dvh] mx-auto pt-4 pb-8 px-4 gap-y-12 dark:bg-gray-800 dark:text-white"
   >
     <Header />
-    <main class="prose dark:prose-invert">
+    <main class="prose dark:prose-invert col-span-8 col-start-3">
       <slot />
     </main>
     <Footer />
+    <Search client:idle allPostsSearchIndex={allPostsSearchIndex} />
   </body>
 </html>

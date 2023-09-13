@@ -56,6 +56,7 @@ const { title, description, image = "/image/index.png" } = Astro.props;
 
 <script is:inline>
 document.addEventListener("astro:page-load", () => {
+  // handle theme switching
   const theme = (() => {
     if (
       typeof localStorage !== "undefined" &&
@@ -75,5 +76,31 @@ document.addEventListener("astro:page-load", () => {
     document.documentElement.classList.add("dark");
   }
   window.localStorage.setItem("theme", theme);
+
+  // handle search dialog
+  const searchButton = document.getElementById("search-button");
+  const searchCancel = document.getElementById("search-cancel");
+  const searchDialog = document.getElementById("search-dialog");
+
+  if (!searchButton) {
+    console.log("no search button");
+    return;
+  }
+  if (!searchDialog) {
+    console.log("no search dialog");
+    return;
+  }
+  if (!searchCancel) {
+    console.log("no search cancel");
+    return;
+  }
+
+  searchButton.addEventListener("click", () => {
+    searchDialog.classList.toggle("hidden");
+  });
+
+  searchCancel.addEventListener("click", () => {
+    searchDialog.classList.toggle("hidden");
+  });
 });
 </script>

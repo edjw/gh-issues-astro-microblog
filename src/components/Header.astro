@@ -1,6 +1,7 @@
 ---
 import HeaderLink from "@/components/HeaderLink.astro";
 import ThemeSwitcher from "@/components/ThemeSwitcher.astro";
+import SearchButton from "@/components/SearchButton.astro";
 import { SITE_TITLE, MAIN_WEBSITE_URL, repoName, repoOwner } from "@/consts";
 
 const headerURL =
@@ -8,7 +9,10 @@ const headerURL =
     ? `https://github.com/${repoOwner}/${repoName}/issues`
     : "/";
 ---
-<header class="flex gap-x-6 sm:gap-x-8 items-center justify-between">
+
+<header
+  class="flex gap-x-6 sm:gap-x-8 items-center justify-between col-span-9 col-start-2"
+>
   <h1 class="underline hover:no-underline text-normal text-lg">
     <a href={headerURL}>{SITE_TITLE}</a>
   </h1>
@@ -34,10 +38,11 @@ const headerURL =
         ></path>
       </svg>
     </HeaderLink>
-    <!-- <HeaderLink href="/">Micro</HeaderLink> -->
-    <!-- <HeaderLink href="/blog">Blog</HeaderLink> -->
-    <!-- <HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">Twitter</HeaderLink> -->
-    <!-- <HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink> -->
+    <!-- <HeaderLink href="/">Micro</HeaderLink>
+ <HeaderLink href="/blog">Blog</HeaderLink>
+ <HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">Twitter</HeaderLink>
+  <HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink> -->
   </nav>
   <ThemeSwitcher />
+  <SearchButton />
 </header>

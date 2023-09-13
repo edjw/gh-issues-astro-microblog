@@ -10,7 +10,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { fetchAllGithubIssues } from "@/data/fetchAllGithubIssues";
 import type { GithubIssueWithSlug } from "@/types/githubIssueTypes";
 
-const posts: GithubIssueWithSlug[] = await fetchAllGithubIssues();
+const allPosts: GithubIssueWithSlug[] = await fetchAllGithubIssues();
 
 export type Label = {
   id?: number | undefined;
@@ -23,7 +23,7 @@ export type Label = {
 };
 
 // get a list of all unique label names sorted alphabetically and make sure label is not a string
-const allLabels = posts
+const allLabels = allPosts
   .map((post) => post.labels)
   .flat()
   .reduce((acc: Label[], label) => {
