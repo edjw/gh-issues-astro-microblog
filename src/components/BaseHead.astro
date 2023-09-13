@@ -79,6 +79,7 @@ document.addEventListener("astro:page-load", () => {
 
   // handle search dialog
   const searchButton = document.getElementById("search-button");
+  const searchInput = document.getElementById("search-input");
   const searchCancel = document.getElementById("search-cancel");
   const searchDialog = document.getElementById("search-dialog");
 
@@ -97,6 +98,7 @@ document.addEventListener("astro:page-load", () => {
 
   searchButton.addEventListener("click", () => {
     searchDialog.classList.toggle("hidden");
+    searchInput.focus();
   });
 
   searchCancel.addEventListener("click", () => {
