@@ -11,12 +11,12 @@ const headerURL =
 ---
 
 <header
-  class="flex gap-x-6 sm:gap-x-8 items-center justify-between col-span-9 col-start-2"
+  class="flex gap-x-6 sm:gap-x-8 items-center justify-between col-span-full md:col-span-8 md:col-start-3"
 >
   <h1 class="underline hover:no-underline text-normal text-lg">
     <a href={headerURL}>{SITE_TITLE}</a>
   </h1>
-  <nav class="leading-tight">
+  <!-- <nav class="leading-tight">
     <HeaderLink
       href={MAIN_WEBSITE_URL}
       class={`hover:underline flex flex-row items-center`}
@@ -37,12 +37,14 @@ const headerURL =
           d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
         ></path>
       </svg>
-    </HeaderLink>
-    <!-- <HeaderLink href="/">Micro</HeaderLink>
+    </HeaderLink> -->
+  <!-- <HeaderLink href="/">Micro</HeaderLink>
  <HeaderLink href="/blog">Blog</HeaderLink>
  <HeaderLink href="https://twitter.com/astrodotbuild" target="_blank">Twitter</HeaderLink>
-  <HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink> -->
-  </nav>
-  <ThemeSwitcher />
-  <SearchButton />
+  <HeaderLink href="https://github.com/withastro/astro" target="_blank">GitHub</HeaderLink>
+  </nav>-->
+  <div class="flex flex-row gap-x-8 items-center">
+    <ThemeSwitcher />
+    <SearchButton />
+  </div>
 </header>
