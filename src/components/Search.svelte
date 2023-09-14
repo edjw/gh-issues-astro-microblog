@@ -79,12 +79,14 @@
       </div>
       <!-- search results -->
 
-      <ul
-        class="flex flex-col gap-y-8 overflow-auto max-h-[calc(100vh - 20rem)]"
-      >
+      <ul class="flex flex-col gap-y-8">
         {#each searchResults as post}
           <li>
-            <a href="/post/{post.slug}/" data-astro-reload>
+            <a
+              href="/post/{post.slug}/"
+              class="block w-full sm:w-fit py-2"
+              data-astro-reload
+            >
               {post.title}
             </a>
           </li>
