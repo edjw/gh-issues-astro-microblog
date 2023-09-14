@@ -9,7 +9,6 @@ export async function GET(context: APIContext) {
   const feedItems = await Promise.all(
     posts.map(async (post) => {
       const parsedContent = await parseMD(post.body || "");
-
       return {
         title: post.title,
         pubDate: new Date(post.created_at),
@@ -18,7 +17,6 @@ export async function GET(context: APIContext) {
       };
     })
   );
-
   return rss({
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,

@@ -41,7 +41,7 @@ export async function readJSONFile(filename: PathLike) {
 
 export async function writeJSONFile(filePath: PathLike, data) {
   try {
-    await fsPromises.writeFile(filePath, JSON.stringify(data));
+    await fsPromises.writeFile(filePath, JSON.stringify(data, null, 2));
     // console.log("JSON file updated successfully.");
   } catch (err) {
     console.error("Error writing to the JSON file:", err);

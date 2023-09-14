@@ -98,8 +98,8 @@ const fetchAssetDetailsFromCloudinary = async (
     return null;
   } catch (error) {
     // If error is 'not found', return null, otherwise log the error
-    if (error.http_code === 404) return null;
-    console.error("Error fetching Cloudinary details:", error);
+    // if (error.http_code === 404) return null;
+    console.error("Error fetching Cloudinary details:", error, publicId, type);
     return null;
   }
 };
@@ -162,11 +162,12 @@ await createEmptyJSONFileIfNotExists("assetsUploadRecord.json");
 let assetsCacheJSON = await readJSONFile("assetsUploadRecord.json");
 const assetsCacheEmpty: boolean =
   !assetsCacheJSON || assetsCacheJSON.length === 0;
+
+let assetsCache = assetsCacheJSON.allAssetDetails || {};
 if (assetsCacheEmpty) {
-  await writeJSONFile("assetsUploadRecord.json", { allAssetDetails: [] });
-  assetsCacheJSON = await readJSONFile("assetsUploadRecord.json");
+  await writeJSONFile("assetsUploadRecord.json", { allAssetDetails: {} });
+  assetsCache = await readJSONFile("assetsUploadRecord.json").allAssetDetails;
 }
-let { allAssetDetails: assetsCache } = assetsCacheJSON;
 
 type AssetDetails = {
   original_url: string;
@@ -179,16 +180,7 @@ const allAssetDetails: AssetDetails[] = [];
 
 const processUrls = async (urls: string[]) => {
   for (const url of urls) {
-    // If the url is already in the cache, don't process it again
-    // And add it to the allAssetDetails array
-
-    let assetRecord;
-    for (const asset of assetsCache) {
-      if (asset.original_url === url) {
-        assetRecord = asset;
-        break;
-      }
-    }
+    let assetRecord = assetsCache[url];
 
     if (assetRecord) {
       if (
@@ -200,60 +192,34 @@ const processUrls = async (urls: string[]) => {
       }
       continue;
     } else {
-      // If the url is not in the cache, process it. Then add it to the cache
-
-      const publicId = new URL(url).pathname.split("/").pop()?.split(".")[0]; // Extracting filename without extension
-
-      // First, attempt to fetch the details from Cloudinary using the publicId
-      const assetDetailsFromCloudinary = await fetchAssetDetailsFromCloudinary(
-        publicId
-      );
-
-      if (assetDetailsFromCloudinary) {
-        const assetType = isURLVideo(assetDetailsFromCloudinary.url)
-          ? "video"
-          : "image";
-
-        allAssetDetails.push({
-          original_url: url,
-          ...assetDetailsFromCloudinary,
-        });
-        // Also update assetsCache for future reference
-        assetsCache.push(assetDetailsFromCloudinary);
-      } else {
-        // Fetch the finalUrl if the asset is not in Cloudinary
-        const finalUrl = await fetchRedirectUrl(url);
-        if (!finalUrl) {
-          console.error("Final URL not found for: ", url);
-          continue;
-        }
-
-        const assetType = isURLVideo(finalUrl) ? "video" : "image";
-
-        const cloudinaryResponse = await uploadToCloudinary(
-          finalUrl,
-          assetType
-        );
-
-        if (cloudinaryResponse) {
-          const newAssetDetail = {
-            original_url: url,
-            url: cloudinaryResponse.eager[0].secure_url,
-            width: cloudinaryResponse.eager[0].width,
-            height: cloudinaryResponse.eager[0].height,
-          };
-          allAssetDetails.push(newAssetDetail);
-
-          // Also update assetsCache for future reference
-          assetsCache.push(newAssetDetail);
-        }
+      // Fetch the finalUrl
+      const finalUrl = await fetchRedirectUrl(url);
+      if (!finalUrl) {
+        console.error("Final URL not found for: ", url);
+        continue;
       }
+
+      const assetType = isURLVideo(finalUrl) ? "video" : "image";
+
+      const cloudinaryResponse = await uploadToCloudinary(finalUrl, assetType);
+
+      if (cloudinaryResponse) {
+        const newAssetDetail = {
+          original_url: url,
+          url: cloudinaryResponse.eager[0].secure_url,
+          width: cloudinaryResponse.eager[0].width,
+          height: cloudinaryResponse.eager[0].height,
+        };
+
+        allAssetDetails.push(newAssetDetail);
+        assetsCache[url] = newAssetDetail;
+      }
+
+      await writeJSONFile("assetsUploadRecord.json", {
+        allAssetDetails: assetsCache,
+      });
     }
   }
-
-  await writeJSONFile("assetsUploadRecord.json", {
-    allAssetDetails: allAssetDetails,
-  });
 
   return allAssetDetails;
 };
