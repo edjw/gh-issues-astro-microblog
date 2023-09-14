@@ -51,13 +51,24 @@ async function getSearchIndexForAllPosts() {
       .replace(/https?:\/\/.*\.(mov|mp4)/gi, "") // remove video links (case insensitive)
       .replace(/\n|\r/g, ""); // remove line breaks
 
+    const tags = post.labels
+      .map((label) => {
+        if (typeof label === "string") {
+          return label;
+        } else if (label && typeof label === "object" && "name" in label) {
+          return label.name;
+        }
+        return "";
+      })
+      .join(" ");
+
     return {
       title: post.title,
       slug: post.slug,
       body: cleanedBody,
       created_at: post.created_at,
       updated_at: post.updated_at,
-      tags: post.labels.map((label) => label.name).join(" "),
+      tags: tags,
     };
   });
 }
