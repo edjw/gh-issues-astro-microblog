@@ -43,26 +43,29 @@ if (pathname.startsWith("/tags/")) {
 const allPosts: GithubIssueWithSlug[] = await fetchAllGithubIssues();
 
 async function getSearchIndexForAllPosts() {
-  const allPostsSearchIndex = [];
+  return allPosts.map((post) => {
+    const body = post.body || "";
 
-  for (const post of allPosts) {
-    allPostsSearchIndex.push({
+    const cleanedBody = body
+      .replace(/!\[(.*?)\]\(.*?\)/g, "$1") // keep alt text, remove rest of image markdown
+      .replace(/https?:\/\/.*\.(mov|mp4)/gi, "") // remove video links (case insensitive)
+      .replace(/\n|\r/g, ""); // remove line breaks
+
+    return {
       title: post.title,
       slug: post.slug,
-      body: marked.parse(post.body),
+      body: cleanedBody,
       created_at: post.created_at,
       updated_at: post.updated_at,
       tags: post.labels.map((label) => label.name).join(" "),
-    });
-  }
-
-  return allPostsSearchIndex;
+    };
+  });
 }
 
 const allPostsSearchIndex = await getSearchIndexForAllPosts();
 ---
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <BaseHead title={title} description={description} image={socialImage} />
@@ -71,7 +74,7 @@ const allPostsSearchIndex = await getSearchIndexForAllPosts();
     class="container grid grid-rows-[auto_1fr_auto] grid-cols-12 min-h-[100dvh] mx-auto pt-4 pb-8 px-4 gap-y-12 dark:bg-gray-800 dark:text-white"
   >
     <Header />
-    <main class="prose dark:prose-invert col-span-full md:col-span-8 md:col-start-4">
+    <main class="prose dark:prose-invert col-span-full mx-auto max-w-full">
       <slot />
     </main>
     <Footer />

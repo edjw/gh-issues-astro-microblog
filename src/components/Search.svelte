@@ -3,23 +3,52 @@
 
   export let allPostsSearchIndex;
 
-  let searchOptions = {
+  const options = {
     keys: ["title", "body", "tags", "slug"],
-    includeMatches: true,
+    threshold: 0.25,
     minMatchCharLength: 2,
-    threshold: 0.5,
+    distance: 5000,
   };
 
-  const fuse = new Fuse(allPostsSearchIndex, searchOptions);
+  const fuse = new Fuse(allPostsSearchIndex, options);
 
   let query = "";
-  $: searchResults = [];
+
+  type searchIndexPost = {
+    title: string;
+    slug: string;
+    body: string;
+    created_at: string;
+    updated_at: string;
+    tags: string;
+  };
+
+  let searchResults: searchIndexPost[] = [];
+
+  $: searchResults;
+
+  function isSearchIndexPost(object: any): object is searchIndexPost {
+    return (
+      "title" in object &&
+      "slug" in object &&
+      "body" in object &&
+      "created_at" in object &&
+      "updated_at" in object &&
+      "tags" in object
+    );
+  }
 
   const handleSearch = () => {
-    searchResults = fuse
-      .search(query)
-      .map((result) => result.item)
-      .slice(0, 5);
+    searchResults.length = 0;
+    fuse.search(query).forEach((result) => {
+      if (isSearchIndexPost(result.item)) {
+        if (searchResults.length < 5) {
+          searchResults.push(result.item);
+        }
+      } else {
+        console.error("Invalid item format:", result.item);
+      }
+    });
   };
 </script>
 
@@ -50,7 +79,9 @@
       </div>
       <!-- search results -->
 
-      <ul class="flex flex-col gap-y-8">
+      <ul
+        class="flex flex-col gap-y-8 overflow-auto max-h-[calc(100vh - 20rem)]"
+      >
         {#each searchResults as post}
           <li>
             <a href="/post/{post.slug}/" data-astro-reload>
