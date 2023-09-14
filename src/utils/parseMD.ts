@@ -3,6 +3,12 @@ import sanitizeHtml from "sanitize-html";
 import { v2 as cloudinary, type UploadApiResponse } from "cloudinary";
 import pkg from "follow-redirects";
 const { https } = pkg;
+
+import {
+  createEmptyJSONFileIfNotExists,
+  readJSONFile,
+  writeJSONFile,
+} from "./fsFunctions";
 import { ASSETS_URL } from "@/consts";
 
 const GITHUB_TOKEN = import.meta.env.GITHUB_TOKEN;
@@ -57,9 +63,7 @@ const fetchRedirectUrl = async (url: string): Promise<string | null> => {
             resolve(null);
           }
 
-          response.on("data", () => {
-
-          });
+          response.on("data", () => {});
         }
       )
       .on("error", (err) => {
@@ -76,6 +80,30 @@ cloudinary.config({
   api_secret: CLOUDINARY_API_SECRET,
 });
 
+const fetchAssetDetailsFromCloudinary = async (
+  publicId: string,
+  type: "image" | "video"
+): Promise<null | { url: string; width: number; height: number }> => {
+  try {
+    const result = await cloudinary.api.resource(publicId, {
+      resource_type: type,
+    });
+    if (result) {
+      return {
+        url: result.secure_url,
+        width: result.width,
+        height: result.height,
+      };
+    }
+    return null;
+  } catch (error) {
+    // If error is 'not found', return null, otherwise log the error
+    if (error.http_code === 404) return null;
+    console.error("Error fetching Cloudinary details:", error);
+    return null;
+  }
+};
+
 // Uploads images and videos to cloudinary during the build
 const uploadToCloudinary = async (url: string, type: "image" | "video") => {
   try {
@@ -89,7 +117,7 @@ const uploadToCloudinary = async (url: string, type: "image" | "video") => {
         {
           quality: "auto",
           width: 500,
-          crop: "limit"
+          crop: "limit",
         },
       ],
     });
@@ -129,31 +157,105 @@ const extractUrlsFromMarkdown = (content: string): string[] => {
 };
 
 // Loops through all urls, works out if they're an image or a video. Uploads images and videos to Cloudinary.
-const processUrls = async (
-  urls: string[]
-): Promise<Map<string, UploadApiResponse>> => {
-  const urlMap: Map<string, UploadApiResponse> = new Map();
+await createEmptyJSONFileIfNotExists("assetsUploadRecord.json");
 
+let assetsCacheJSON = await readJSONFile("assetsUploadRecord.json");
+const assetsCacheEmpty: boolean =
+  !assetsCacheJSON || assetsCacheJSON.length === 0;
+if (assetsCacheEmpty) {
+  await writeJSONFile("assetsUploadRecord.json", { allAssetDetails: [] });
+  assetsCacheJSON = await readJSONFile("assetsUploadRecord.json");
+}
+let { allAssetDetails: assetsCache } = assetsCacheJSON;
 
-  // TODO: this is VERY VERY slow. change to Promise.all or parallel
-  // or keep a cache of already uploaded images and videos and only find the redirect url and upload if it's a new one (based on the url)
+type AssetDetails = {
+  original_url: string;
+  url: string;
+  width: number;
+  height: number;
+};
+
+const allAssetDetails: AssetDetails[] = [];
+
+const processUrls = async (urls: string[]) => {
   for (const url of urls) {
-    const finalUrl = await fetchRedirectUrl(url);
-    const assetType = isURLVideo(finalUrl) ? "video" : "image";
+    // If the url is already in the cache, don't process it again
+    // And add it to the allAssetDetails array
 
-    if (!finalUrl) {
-      console.error("Final URL not found for: ", url);
-      continue;
+    let assetRecord;
+    for (const asset of assetsCache) {
+      if (asset.original_url === url) {
+        assetRecord = asset;
+        break;
+      }
     }
 
-    const transformedHref = await uploadToCloudinary(finalUrl, assetType);
+    if (assetRecord) {
+      if (
+        !allAssetDetails.some(
+          (asset) => asset.original_url === assetRecord.original_url
+        )
+      ) {
+        allAssetDetails.push(assetRecord);
+      }
+      continue;
+    } else {
+      // If the url is not in the cache, process it. Then add it to the cache
 
-    if (transformedHref) {
-      urlMap.set(url, transformedHref);
+      const publicId = new URL(url).pathname.split("/").pop()?.split(".")[0]; // Extracting filename without extension
+
+      // First, attempt to fetch the details from Cloudinary using the publicId
+      const assetDetailsFromCloudinary = await fetchAssetDetailsFromCloudinary(
+        publicId
+      );
+
+      if (assetDetailsFromCloudinary) {
+        const assetType = isURLVideo(assetDetailsFromCloudinary.url)
+          ? "video"
+          : "image";
+
+        allAssetDetails.push({
+          original_url: url,
+          ...assetDetailsFromCloudinary,
+        });
+        // Also update assetsCache for future reference
+        assetsCache.push(assetDetailsFromCloudinary);
+      } else {
+        // Fetch the finalUrl if the asset is not in Cloudinary
+        const finalUrl = await fetchRedirectUrl(url);
+        if (!finalUrl) {
+          console.error("Final URL not found for: ", url);
+          continue;
+        }
+
+        const assetType = isURLVideo(finalUrl) ? "video" : "image";
+
+        const cloudinaryResponse = await uploadToCloudinary(
+          finalUrl,
+          assetType
+        );
+
+        if (cloudinaryResponse) {
+          const newAssetDetail = {
+            original_url: url,
+            url: cloudinaryResponse.eager[0].secure_url,
+            width: cloudinaryResponse.eager[0].width,
+            height: cloudinaryResponse.eager[0].height,
+          };
+          allAssetDetails.push(newAssetDetail);
+
+          // Also update assetsCache for future reference
+          assetsCache.push(newAssetDetail);
+        }
+      }
     }
   }
 
-  return urlMap;
+  await writeJSONFile("assetsUploadRecord.json", {
+    allAssetDetails: allAssetDetails,
+  });
+
+  return allAssetDetails;
 };
 
 const renderer = new marked.Renderer();
@@ -184,20 +286,21 @@ const sanitizeHTMLOptions: sanitizeHtml.IOptions = {
 
 export const parseMD = async (content: string): Promise<string> => {
   const urls = extractUrlsFromMarkdown(content);
-
-  const processedUrlMap = await processUrls(urls);
+  const processedAssets = await processUrls(urls);
 
   renderer.link = (href, title, text) => {
+    const transformedAsset = processedAssets.find(
+      (asset) => asset.original_url === href
+    );
+
     if (
       isURLVideo(href) ||
       href.match(/\.(jpeg|jpg|gif|png)$/i) ||
       isAssetURL(href)
     ) {
-      const transformedHref = processedUrlMap.get(href);
-
-      if (transformedHref && isURLVideo(href)) {
+      if (transformedAsset && isURLVideo(href)) {
         return `<div class="flex justify-center"><video controls muted preload="metadata" class="max-h-72 my-0 border dark:border-gray-500">
-              <source src="${transformedHref.eager[0].secure_url}" type="video/mp4">
+              <source src="${transformedAsset.url}" type="video/mp4">
             </video></div>`;
       }
       return `<a href="${href}">${text}</a>`;
@@ -206,13 +309,14 @@ export const parseMD = async (content: string): Promise<string> => {
   };
 
   renderer.image = (href, title, text) => {
-    const transformedHref = processedUrlMap.get(href);
-    if (transformedHref) {
-      return `<img src="${
-        transformedHref.eager[0].secure_url
-      }" alt="${text}" title="${title || ""}" width=${
-        transformedHref.eager[0].width
-      } height=${transformedHref.eager[0].height} />`;
+    const transformedAsset = processedAssets.find(
+      (asset) => asset.original_url === href
+    );
+
+    if (transformedAsset) {
+      return `<img src="${transformedAsset.url}" alt="${text}" title="${
+        title || ""
+      }" width=${transformedAsset.width} height=${transformedAsset.height} />`;
     }
     return `<img src="${href}" alt="${text}" />`;
   };
