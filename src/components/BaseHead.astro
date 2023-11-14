@@ -8,9 +8,9 @@ import "../styles/global.css";
 import { SITE_TITLE } from "@/consts";
 
 type Props = {
-  title: string;
-  description: string;
-  image?: string;
+	title: string;
+	description: string;
+	image?: string;
 };
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
@@ -20,89 +20,135 @@ const { title, description, image = "/image/index.png" } = Astro.props;
 
 <!-- Global Metadata -->
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<meta
+	name="viewport"
+	content="width=device-width,initial-scale=1"
+/>
+<link
+	rel="icon"
+	type="image/svg+xml"
+	href="/favicon.svg"
+/>
 
 <!-- Canonical URL -->
-<link rel="canonical" href={canonicalURL} />
+<link
+	rel="canonical"
+	href={canonicalURL}
+/>
 
 <!-- Primary Meta Tags -->
 <title>{title}</title>
-<meta name="title" content={title} />
-<meta name="description" content={description} />
+<meta
+	name="title"
+	content={title}
+/>
+<meta
+	name="description"
+	content={description}
+/>
 
 <!-- Open Graph / Facebook -->
-<meta property="og:type" content="website" />
-<meta property="og:url" content={Astro.url} />
-<meta property="og:title" content={title} />
-<meta property="og:description" content={description} />
-<meta property="og:image" content={new URL(image, Astro.url)} />
+<meta
+	property="og:type"
+	content="website"
+/>
+<meta
+	property="og:url"
+	content={Astro.url}
+/>
+<meta
+	property="og:title"
+	content={title}
+/>
+<meta
+	property="og:description"
+	content={description}
+/>
+<meta
+	property="og:image"
+	content={new URL(image, Astro.url)}
+/>
 
 <!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image" />
-<meta property="twitter:url" content={Astro.url} />
-<meta property="twitter:title" content={title} />
-<meta property="twitter:description" content={description} />
-<meta property="twitter:image" content={new URL(image, Astro.url)} />
+<meta
+	property="twitter:card"
+	content="summary_large_image"
+/>
+<meta
+	property="twitter:url"
+	content={Astro.url}
+/>
+<meta
+	property="twitter:title"
+	content={title}
+/>
+<meta
+	property="twitter:description"
+	content={description}
+/>
+<meta
+	property="twitter:image"
+	content={new URL(image, Astro.url)}
+/>
 
 <link
-  href="/rss.xml"
-  rel="alternate"
-  type="application/rss+xml"
-  title={`RSS feed for ${SITE_TITLE}`}
+	href="/rss.xml"
+	rel="alternate"
+	type="application/rss+xml"
+	title={`RSS feed for ${SITE_TITLE}`}
 />
 
 <ViewTransitions />
 
 <script is:inline>
-document.addEventListener("astro:page-load", () => {
-  // handle theme switching
-  const theme = (() => {
-    if (
-      typeof localStorage !== "undefined" &&
-      localStorage.getItem("theme")
-    ) {
-      return localStorage.getItem("theme");
-    }
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  })();
+	document.addEventListener("astro:after-swap", () => {
+		// handle theme switching
+		const theme = (() => {
+			if (
+				typeof localStorage !== "undefined" &&
+				localStorage.getItem("theme")
+			) {
+				return localStorage.getItem("theme");
+			}
+			if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+				return "dark";
+			}
+			return "light";
+		})();
 
-  if (theme === "light") {
-    document.documentElement.classList.remove("dark");
-  } else {
-    document.documentElement.classList.add("dark");
-  }
-  window.localStorage.setItem("theme", theme);
+		if (theme === "light") {
+			document.documentElement.classList.remove("dark");
+		} else {
+			document.documentElement.classList.add("dark");
+		}
+		window.localStorage.setItem("theme", theme);
 
-  // handle search dialog
-  const searchButton = document.getElementById("search-button");
-  const searchInput = document.getElementById("search-input");
-  const searchCancel = document.getElementById("search-cancel");
-  const searchDialog = document.getElementById("search-dialog");
+		// handle search dialog
+		const searchButton = document.getElementById("search-button");
+		const searchInput = document.getElementById("search-input");
+		const searchCancel = document.getElementById("search-cancel");
+		const searchDialog = document.getElementById("search-dialog");
 
-  if (!searchButton) {
-    console.log("no search button");
-    return;
-  }
-  if (!searchDialog) {
-    console.log("no search dialog");
-    return;
-  }
-  if (!searchCancel) {
-    console.log("no search cancel");
-    return;
-  }
+		if (!searchButton) {
+			console.log("no search button");
+			return;
+		}
+		if (!searchDialog) {
+			console.log("no search dialog");
+			return;
+		}
+		if (!searchCancel) {
+			console.log("no search cancel");
+			return;
+		}
 
-  searchButton.addEventListener("click", () => {
-    searchDialog.classList.toggle("hidden");
-    searchInput.focus();
-  });
+		searchButton.addEventListener("click", () => {
+			searchDialog.classList.toggle("hidden");
+			searchInput.focus();
+		});
 
-  searchCancel.addEventListener("click", () => {
-    searchDialog.classList.toggle("hidden");
-  });
-});
+		searchCancel.addEventListener("click", () => {
+			searchDialog.classList.toggle("hidden");
+		});
+	});
 </script>
