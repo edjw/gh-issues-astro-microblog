@@ -28,6 +28,14 @@
   ],
   "rewrites": [
     {
+      "source": "/stats/js/script.js",
+      "destination": "https://plausible.io/js/script.js"
+    },
+    {
+      "source": "/stats/api/event",
+      "destination": "https://plausible.io/api/event"
+    },
+    {
       "source": "/",
       "destination": "/posts/1"
     },
